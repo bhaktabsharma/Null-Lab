@@ -1,0 +1,43 @@
+{
+  "id": "api-webhook-signature-optional",
+  "version": "1.0.0",
+  "title": "Payhook — Subscription Events",
+  "objective": "Billing webhooks upgrade an account to Pro once their signature is verified. Upgrade your account without a correctly signed event.",
+  "family": "api-security",
+  "subcategory": "webhook-signature",
+  "difficulty": "medium",
+  "tags": [
+    "webhooks",
+    "signatures",
+    "payments",
+    "api-security"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-webhook-signature-optional/server.ts"
+  },
+  "verifier": {
+    "condition": "A webhook with no signature header at all grants Pro access."
+  },
+  "weakness": "The webhook handler verifies the signature only when a signature header is present, and a request with the header missing entirely skips verification instead of being rejected.",
+  "vulnerableEndpoint": "POST /webhooks/billing",
+  "seededData": "An account on the Basic plan with no billing events yet. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "On the Basic plan."
+    }
+  ],
+  "hints": [
+    "Send a correctly signed event first and see what a valid request actually looks like.",
+    "A check that runs 'if a signature is given, verify it' is not the same promise as 'a signature is required'.",
+    "Send the same event with the signature header removed entirely, not just left blank or wrong."
+  ],
+  "burpNotes": "Send the webhook request with the signature header deleted, not emptied.",
+  "spoilers": [
+    "x-webhook-signature"
+  ]
+}

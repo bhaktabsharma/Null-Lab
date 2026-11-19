@@ -1,0 +1,44 @@
+{
+  "id": "ac-share-accept-unbound",
+  "version": "1.0.0",
+  "title": "Docly — Shared With You",
+  "objective": "Documents are shared with people by email, and you accept the ones addressed to you. Gain access to a document that was shared with someone else.",
+  "family": "access-control",
+  "subcategory": "share-recipient-binding",
+  "difficulty": "easy",
+  "tags": [
+    "sharing",
+    "idor",
+    "invitations",
+    "access-control"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-share-accept-unbound/server.ts"
+  },
+  "verifier": {
+    "condition": "A share is accepted by an account whose email differs from the recipient the share was sent to."
+  },
+  "weakness": "The accept endpoint finds a share by its sequential id and grants access to whoever is signed in, without verifying that the share was addressed to that account's email; only the pending list is filtered by recipient.",
+  "vulnerableEndpoint": "POST /api/shares/:id/accept",
+  "seededData": "Users alice, dana, ben, tess. Documents d-901 and d-902 (tess) and d-903 (ben), with pending shares sh-2041 (to dana), sh-2042 (to ben) and sh-2043 (to alice). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Recipient",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has one share waiting."
+    }
+  ],
+  "hints": [
+    "Look at how shares are identified. Compare the ids you can see with what you might be able to guess.",
+    "The pending list only shows your shares. Does accepting one check the same thing?",
+    "Accept a share id that is not in your list, then open the document it points to."
+  ],
+  "burpNotes": "Accept your own pending share with Burp running and look at exactly what identifies the share in the request.",
+  "spoilers": [
+    "/api/shares/",
+    "sh-2041"
+  ]
+}

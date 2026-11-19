@@ -1,0 +1,42 @@
+{
+  "id": "api-version-inconsistency",
+  "version": "1.0.0",
+  "title": "AccountsAPI — v1 Never Went Away",
+  "objective": "The current API version correctly stops you from reading another account. Find the old version that's still running.",
+  "family": "api-security",
+  "subcategory": "api-version-inconsistency",
+  "difficulty": "medium",
+  "tags": [
+    "api-versioning",
+    "idor",
+    "deprecated-endpoint"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-version-inconsistency/server.ts"
+  },
+  "verifier": {
+    "condition": "An account record belonging to a different signed-in user than the caller is returned by the v1 endpoint, while the equivalent v2 request for the same account correctly refuses it."
+  },
+  "weakness": "An authorization check added to fix an old vulnerability was only added to the current API version; the previous version, kept mounted for backwards compatibility, still has the original, unfixed behavior.",
+  "vulnerableEndpoint": "GET /api/v1/accounts/:id (ownership check missing; /api/v2/accounts/:id has it)",
+  "seededData": "Users alice and bob, each with an account record. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Try your own account id on both API versions first."
+    }
+  ],
+  "hints": [
+    "Read your own account through both /api/v1/ and /api/v2/ and confirm they return the same thing for your own data.",
+    "Now try bob's account id through v2 — it should be refused. Try the exact same id through v1.",
+    "Old API versions are often kept running for compatibility long after a fix ships to the current one."
+  ],
+  "spoilers": [
+    "balanceUsd"
+  ],
+  "burpNotes": "Repeat the same account-id request against both /api/v1/accounts/:id and /api/v2/accounts/:id and diff the responses."
+}

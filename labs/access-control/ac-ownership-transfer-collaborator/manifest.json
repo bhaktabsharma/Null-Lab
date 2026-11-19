@@ -1,0 +1,43 @@
+{
+  "id": "ac-ownership-transfer-collaborator",
+  "version": "1.0.0",
+  "title": "Atlas — Project Hand-over",
+  "objective": "Project owners can hand a project over to someone else. You are only a collaborator on one of the projects. Take ownership of it anyway.",
+  "family": "access-control",
+  "subcategory": "ownership-transfer",
+  "difficulty": "medium",
+  "tags": [
+    "ownership",
+    "function-level-authz",
+    "access-control"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-ownership-transfer-collaborator/server.ts"
+  },
+  "verifier": {
+    "condition": "A project's ownership is transferred by a signed-in user who is a collaborator and not the project's current owner."
+  },
+  "weakness": "The ownership-transfer endpoint verifies that the caller belongs to the project (owner or collaborator) instead of that the caller is the owner, while the neighbouring owner-only endpoints check correctly.",
+  "vulnerableEndpoint": "POST /api/projects/:id/transfer",
+  "seededData": "Users alice, tess, carol, ben. Projects p1 'Q4 Launch Plan' (owner tess; alice and ben collaborate), p2 'Brand Guidelines 2.0' (owner carol; ben collaborates), p3 'Pricing Model' (owner tess; no collaborators). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Collaborator",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Collaborator on 'Q4 Launch Plan'."
+    }
+  ],
+  "hints": [
+    "The interface shows you what you may do as a collaborator. The API may allow more than the interface does.",
+    "Compare how different actions on the same project respond when you attempt them without being the owner — they will not all behave alike.",
+    "Find the request the owner's hand-over button sends, and replay it with your own session."
+  ],
+  "burpNotes": "Log in as the collaborator and watch which requests the page makes. The owner's actions exist in the page's script even though you are never shown the buttons for them.",
+  "spoilers": [
+    "/transfer",
+    "newowner"
+  ]
+}

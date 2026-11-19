@@ -1,0 +1,42 @@
+{
+  "id": "ac-tenant-header",
+  "version": "1.0.0",
+  "title": "CloudDesk — Which Tenant Am I?",
+  "objective": "CloudDesk hosts many companies on one platform. You work for Acme; read a support ticket that belongs to a different company.",
+  "family": "access-control",
+  "subcategory": "multi-tenant-isolation",
+  "difficulty": "medium",
+  "tags": [
+    "multi-tenant",
+    "access-control",
+    "headers",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-tenant-header/server.ts"
+  },
+  "verifier": {
+    "condition": "Ticket data belonging to a tenant other than the signed-in user's own tenant is returned because the request named that tenant in a header."
+  },
+  "weakness": "The API resolves the active tenant from a client-supplied request header instead of from the authenticated session, so any user can address any tenant's data.",
+  "vulnerableEndpoint": "GET /api/tickets[/:id] (tenant taken from X-Tenant-Id)",
+  "seededData": "Tenants 'acme' (user alice) and 'globex' (user gina), each with two support tickets. In-memory.",
+  "credentials": [
+    {
+      "label": "Acme agent",
+      "username": "alice",
+      "password": "practice123",
+      "note": "You belong to the 'acme' tenant."
+    }
+  ],
+  "hints": [
+    "Look closely at the response headers, not just the body. What does the platform tell you about how it sees you?",
+    "If the platform lets you tell it who you are, nothing stops you from saying something else."
+  ],
+  "burpNotes": "Inspect both request and response headers in Proxy history for anything that describes who you are or where your data lives.",
+  "spoilers": [
+    "x-tenant-id"
+  ]
+}

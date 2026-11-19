@@ -1,0 +1,44 @@
+{
+  "id": "ac-role-inheritance-upward",
+  "version": "1.0.0",
+  "title": "Foldr — Team Drive",
+  "objective": "Alice works in the Campaigns folder of the company drive and has edit rights there. Edit a file in a folder above it — one you were never given edit rights on.",
+  "family": "access-control",
+  "subcategory": "role-inheritance",
+  "difficulty": "hard",
+  "tags": [
+    "inheritance",
+    "rbac",
+    "hierarchy",
+    "access-control"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-role-inheritance-upward/server.ts"
+  },
+  "verifier": {
+    "condition": "A file is edited by a user who has no editor grant on its folder or on any ancestor folder, only on a folder below it."
+  },
+  "weakness": "The effective-role resolver counts grants on descendants as well as ancestors of a folder (a navigation shortcut), and the file-write endpoint reuses it, so an editor grant deep in the tree gives edit rights on every folder above it.",
+  "vulnerableEndpoint": "PUT /api/files/:id",
+  "seededData": "Folder tree Company > Finance > Payroll and Company > Marketing > Campaigns with synthetic files in each. alice has an editor grant on Campaigns only; tess owns the root. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Campaign editor",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Editor on the Campaigns folder."
+    }
+  ],
+  "hints": [
+    "Look at the access label the drive shows for each folder you can see. Not every folder you can open is one you can change.",
+    "Permissions are supposed to flow downward from where they were granted. Test whether the server only ever applies them in that direction.",
+    "Open a folder above Campaigns, note a file id from its listing, and send an edit for it yourself."
+  ],
+  "burpNotes": "Browse the folders you can see and compare the access label on each with what the API lets you do. The listing shows file ids; the edit button only appears where the interface thinks you may use it.",
+  "spoilers": [
+    "put /api/files",
+    "/api/files/doc-"
+  ]
+}

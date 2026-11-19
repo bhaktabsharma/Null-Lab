@@ -1,0 +1,43 @@
+{
+  "id": "ac-bopla-fields",
+  "version": "1.0.0",
+  "title": "PeopleHub — Sparse Fieldsets",
+  "objective": "Salary and performance data are visible to HR only. As an ordinary employee, get them anyway — without touching anyone's session.",
+  "family": "access-control",
+  "subcategory": "broken-object-property-authz",
+  "difficulty": "medium",
+  "tags": [
+    "bopla",
+    "excessive-data-exposure",
+    "access-control",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-bopla-fields/server.ts"
+  },
+  "verifier": {
+    "condition": "A response to a non-HR user contains the salary or performanceRating property of an employee."
+  },
+  "weakness": "Property-level filtering is applied to the default response shape, but the sparse-fieldset 'fields' parameter projects straight from the raw record and bypasses it.",
+  "vulnerableEndpoint": "GET /api/employees[/:id]?fields=",
+  "seededData": "Users alice (employee) and hana (HR); five synthetic employees with salary and performance rating. In-memory.",
+  "credentials": [
+    {
+      "label": "Employee",
+      "username": "alice",
+      "password": "practice123",
+      "note": "The default responses show no pay information."
+    }
+  ],
+  "hints": [
+    "Read the API reference carefully — which query parameters does the directory accept?",
+    "A filter that decides what to remove is only as good as the code path that uses it."
+  ],
+  "burpNotes": "Compare the default JSON for a single employee with what the documented query parameters return. Property names to try come from the full record shape.",
+  "spoilers": [
+    "?fields=",
+    "fields=salary"
+  ]
+}

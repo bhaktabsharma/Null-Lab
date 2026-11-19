@@ -1,0 +1,43 @@
+{
+  "id": "api-key-scope-by-verb",
+  "version": "1.0.0",
+  "title": "Invoicely — Developer API Keys",
+  "objective": "You hold a read-only API key, documented as GET-only. Delete an invoice with it.",
+  "family": "api-security",
+  "subcategory": "api-key-scope",
+  "difficulty": "medium",
+  "tags": [
+    "api-keys",
+    "scopes",
+    "http-methods",
+    "api-security"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-key-scope-by-verb/server.ts"
+  },
+  "verifier": {
+    "condition": "An invoice is deleted using a key documented and issued as read-only."
+  },
+  "weakness": "The scope check decides whether a read-only key may call an endpoint by matching the request path against a list of \"read endpoints\" and never compares the HTTP method, so DELETE on a path that is normally read with GET is allowed through.",
+  "vulnerableEndpoint": "DELETE /api/invoices/:id",
+  "seededData": "Three synthetic invoices and both a read-only and a full-access API key, shown on the developer page. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has both a read-only and a full-access API key on the developer page."
+    }
+  ],
+  "hints": [
+    "List invoices and fetch a single one with the read-only key, then see which other HTTP methods that same address accepts.",
+    "A key's permission is often decided by which address is being called. Check whether the METHOD is decided the same way.",
+    "Send a DELETE to a single invoice's address using the read-only key."
+  ],
+  "burpNotes": "Change only the HTTP method on an otherwise normal, successful read-only-key request.",
+  "spoilers": [
+    "delete /api/invoices/"
+  ]
+}

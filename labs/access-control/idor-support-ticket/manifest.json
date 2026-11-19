@@ -1,0 +1,50 @@
+{
+  "id": "idor-support-ticket",
+  "version": "1.0.0",
+  "title": "SupportDesk — Private Ticket Leak",
+  "objective": "Find a way to read another customer's private support ticket thread.",
+  "family": "access-control",
+  "subcategory": "idor",
+  "difficulty": "beginner",
+  "tags": [
+    "idor",
+    "access-control",
+    "supportdesk"
+  ],
+  "estimatedMinutes": 15,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/idor-support-ticket/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/idor-support-ticket",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A session authenticated as one customer successfully retrieves the full ticket thread of a different customer via GET /tickets/:id.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [
+    {
+      "label": "Customer account",
+      "username": "priya",
+      "password": "practice123",
+      "note": "Sign in and open your own ticket thread first."
+    }
+  ],
+  "weakness": "A private support ticket thread is returned to any signed-in customer who requests its id.",
+  "vulnerableEndpoint": "GET /tickets/:id",
+  "seededData": "Customers alice and bob, each with private tickets; in-memory.",
+  "spoilers": [
+    "/tickets/"
+  ],
+  "solutionHint": "Ticket URLs look like /tickets/7001. Ticket IDs are small sequential numbers — what else might be near yours?"
+}

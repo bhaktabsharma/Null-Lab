@@ -1,0 +1,51 @@
+{
+  "id": "idor-invoice-leak",
+  "version": "1.0.0",
+  "title": "ShopMart — Invoice Leak",
+  "objective": "Find a way to view another customer's invoice without their credentials.",
+  "family": "access-control",
+  "subcategory": "idor",
+  "difficulty": "beginner",
+  "tags": [
+    "idor",
+    "access-control",
+    "shopmart",
+    "beginner-friendly"
+  ],
+  "estimatedMinutes": 15,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/idor-invoice-leak/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/idor-invoice-leak",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A session authenticated as one customer successfully retrieves the invoice page of a different customer via GET /invoices/:id.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [
+    {
+      "label": "Customer account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in and look at your own invoice first."
+    }
+  ],
+  "weakness": "Sequential invoice ids are used as the only access key; the handler never checks the invoice's owner against the session.",
+  "vulnerableEndpoint": "GET /invoices/:id",
+  "seededData": "Customers alice (invoice 1001) and bob (1002, 1003); in-memory, rebuilt on every start.",
+  "spoilers": [
+    "/invoices/"
+  ],
+  "solutionHint": "Once you're looking at your own invoice, check the URL. The app trusts whatever id is in that URL — what happens if you change it?"
+}

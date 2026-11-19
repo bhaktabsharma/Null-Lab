@@ -1,0 +1,45 @@
+{
+  "id": "ac-invite-role-escalation",
+  "version": "1.0.0",
+  "title": "Orbit — Invite Your Team",
+  "objective": "Members can invite colleagues into the workspace, within limits. Get an account into the workspace that ends up with more privilege than the person who invited it.",
+  "family": "access-control",
+  "subcategory": "org-invitation-privesc",
+  "difficulty": "medium",
+  "tags": [
+    "invitations",
+    "privilege-escalation",
+    "rbac",
+    "access-control"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-invite-role-escalation/server.ts"
+  },
+  "verifier": {
+    "condition": "An invitation is accepted and the new account holds a higher role than the member who created that invitation held at the time."
+  },
+  "weakness": "Invitation creation validates that the requested role exists and refuses to mint owners, but never that the role is no higher than the inviter's own, so a member can create an administrator invitation.",
+  "vulnerableEndpoint": "POST /api/invites",
+  "seededData": "Workspace 'Northwind Studio' with members alice (member), tess (owner) and ben (viewer). Invitations and new accounts live in memory and reset with the instance.",
+  "credentials": [
+    {
+      "label": "Workspace member",
+      "username": "alice",
+      "password": "practice123",
+      "note": "A regular member of Northwind Studio."
+    }
+  ],
+  "hints": [
+    "Walk through the whole invitation flow as a normal user first, including what happens when the invited person opens their link.",
+    "The form only offers some choices. Whether the server enforces the same choices is something you can test, not assume.",
+    "Repeat the invitation request in Repeater and change which role it asks for. The server rejects some values and quietly accepts others — find where the line is."
+  ],
+  "burpNotes": "Do the normal flow once with Burp running — invite someone, then open the link they would receive — so you know what the app sends and what it creates. Then compare what the form lets you pick with what the server will accept.",
+  "spoilers": [
+    "/api/invites",
+    "\"role\":\"admin\"",
+    "\"role\": \"admin\""
+  ]
+}

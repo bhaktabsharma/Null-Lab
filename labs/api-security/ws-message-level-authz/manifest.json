@@ -1,0 +1,43 @@
+{
+  "id": "ws-message-level-authz",
+  "version": "1.0.0",
+  "title": "Roomcast — Team Chat",
+  "objective": "Connecting to a room checks that you belong to it. Read the history of a room you do not belong to over a connection to one you do.",
+  "family": "api-security",
+  "subcategory": "websocket-message-authz",
+  "difficulty": "hard",
+  "tags": [
+    "websocket",
+    "authorization",
+    "real-time",
+    "api-security"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/ws-message-level-authz/server.ts"
+  },
+  "verifier": {
+    "condition": "History for a room the caller does not belong to is returned over a WebSocket connection authorized for a different room."
+  },
+  "weakness": "Room membership is checked once, when the WebSocket connection is opened, and stored on the connection — but a read_history message takes its room from the message itself, which is never compared with the room the connection was actually authorized for.",
+  "vulnerableEndpoint": "WS /connect (message type: read_history)",
+  "seededData": "Two users and two rooms: 'general' (both users) and 'finance-leads' (one user only, with synthetic confidential messages). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Belongs to the 'general' room only."
+    }
+  ],
+  "hints": [
+    "Connect to a room you belong to and read its history the normal way. Notice what the connection itself was authorized for.",
+    "The connection carries one authorization, made once. Think about whether every message you send afterward has to agree with it.",
+    "Open a connection to a room you belong to, then send a history request naming a different room entirely."
+  ],
+  "burpNotes": "A browser WebSocket console, or a small script, is easier here than Burp's repeater; capture the handshake in Burp first to see the exact connection address.",
+  "spoilers": [
+    "read_history"
+  ]
+}

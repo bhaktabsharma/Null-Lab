@@ -1,0 +1,43 @@
+{
+  "id": "websocket-chat-origin-cswsh",
+  "version": "1.0.0",
+  "title": "ChatRelay — Connect From Anywhere",
+  "objective": "ChatRelay authenticates a WebSocket connection using your session cookie at connect time. Show that a connection opened as if from a completely different website is still accepted and authenticated.",
+  "family": "api-security",
+  "subcategory": "websocket-authz",
+  "difficulty": "hard",
+  "tags": [
+    "websocket",
+    "cswsh",
+    "origin-validation",
+    "real-websocket-server"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/websocket-chat-origin-cswsh/server.ts"
+  },
+  "verifier": {
+    "condition": "A WebSocket connection whose handshake carried an Origin header for a different site than this application completes and is treated as an authenticated session."
+  },
+  "weakness": "The WebSocket upgrade handler authenticates using the session cookie but never checks the handshake's Origin header, so a page on any other website can open an authenticated connection on a visiting user's behalf — the browser attaches cookies to a WebSocket handshake the same way it does to an ordinary request.",
+  "vulnerableEndpoint": "GET /chat (WebSocket upgrade; Origin header never checked)",
+  "seededData": "A real WebSocket server (the ws / @fastify/websocket packages — not a simulated protocol). One chat session cookie, minted via normal login.",
+  "credentials": [
+    {
+      "label": "Chat user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in first to get a session cookie, then open a WebSocket connection yourself."
+    }
+  ],
+  "hints": [
+    "Open a normal WebSocket connection to /chat after signing in and confirm it works and greets you by name.",
+    "This time, open the connection while sending an Origin header for a completely unrelated site — your session cookie still goes along with it, the same as any other request to this host.",
+    "Browsers attach cookies to WebSocket handshakes exactly as they do to regular HTTP requests, regardless of which page initiated the connection."
+  ],
+  "spoilers": [
+    "cross-site websocket hijacking"
+  ],
+  "burpNotes": "Burp's WebSocket support (or a scripted ws client) lets you set arbitrary handshake headers, including Origin, while still sending your real session cookie."
+}

@@ -1,0 +1,42 @@
+{
+  "id": "ac-uuid-leak",
+  "version": "1.0.0",
+  "title": "NoteNest — Unguessable, But Not Secret",
+  "objective": "Notes use random identifiers, so nobody can guess one. Read a note that belongs to another user anyway.",
+  "family": "access-control",
+  "subcategory": "uuid-identifier-authz",
+  "difficulty": "medium",
+  "tags": [
+    "uuid",
+    "idor",
+    "access-control",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-uuid-leak/server.ts"
+  },
+  "verifier": {
+    "condition": "A private note owned by another user is returned from GET /api/notes/:id to the signed-in user."
+  },
+  "weakness": "Authorization relies on identifiers being unguessable instead of checking ownership, and a different endpoint discloses those identifiers.",
+  "vulnerableEndpoint": "GET /api/notes/:id (no ownership check) + GET /api/activity (leaks note ids)",
+  "seededData": "Users alice and bob with two private notes each. Note ids are random-looking UUIDs derived per instance, so they differ every launch. In-memory.",
+  "credentials": [
+    {
+      "label": "Note-taker",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Your own notes are listed on the home page."
+    }
+  ],
+  "hints": [
+    "Random ids can't be guessed — but where else might this application mention them?",
+    "Look at every page and API response that isn't about your own notes."
+  ],
+  "burpNotes": "Browse the site and review Proxy history for JSON responses containing UUID-shaped values. Compare who each one belongs to.",
+  "spoilers": [
+    "/api/activity"
+  ]
+}

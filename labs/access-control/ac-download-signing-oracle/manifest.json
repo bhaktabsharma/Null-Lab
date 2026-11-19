@@ -1,0 +1,44 @@
+{
+  "id": "ac-download-signing-oracle",
+  "version": "1.0.0",
+  "title": "Vaultbox — Share a File",
+  "objective": "Vaultbox lets you share your own files with expiring download links. Download a file that belongs to someone else.",
+  "family": "access-control",
+  "subcategory": "signed-url-authz",
+  "difficulty": "hard",
+  "tags": [
+    "signed-urls",
+    "authorization",
+    "file-sharing",
+    "access-control"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-download-signing-oracle/server.ts"
+  },
+  "verifier": {
+    "condition": "A signed download link whose signer does not own the file is used to download that file."
+  },
+  "weakness": "The share-link endpoint signs a download URL for any file id that exists without checking that the caller owns it, and the signed URL is honored without a session, so the signature launders access to other users' files (a signing oracle).",
+  "vulnerableEndpoint": "POST /api/files/:id/share-link",
+  "seededData": "Users alice and tess with synthetic files f-1001 and f-1002 (alice) and f-2001 and f-2002 (tess). The signing key is generated per instance.",
+  "credentials": [
+    {
+      "label": "File owner",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Owns two files."
+    }
+  ],
+  "hints": [
+    "Try downloading a file you do not own directly and see how the server answers. Then look at every other way the app can hand a file to someone.",
+    "A signed link is only as trustworthy as the check that happened before it was signed.",
+    "Ask the link-making request for a file that is not yours. The signature will be valid, and the link needs no login."
+  ],
+  "burpNotes": "Capture a sharing action from the page and look at what the server hands back. Then compare how the direct download and the link download decide who you are.",
+  "spoilers": [
+    "/api/files/",
+    "share-link"
+  ]
+}

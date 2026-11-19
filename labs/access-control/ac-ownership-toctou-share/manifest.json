@@ -1,0 +1,45 @@
+{
+  "id": "ac-ownership-toctou-share",
+  "version": "1.0.0",
+  "title": "Briefcase Docs — Attach to Project",
+  "objective": "You own a confidential document. Make it end up shared with your team project while somebody else owns it.",
+  "family": "access-control",
+  "subcategory": "ownership-toctou",
+  "difficulty": "advanced",
+  "tags": [
+    "race-condition",
+    "toctou",
+    "ownership",
+    "access-control"
+  ],
+  "estimatedMinutes": 40,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-ownership-toctou-share/server.ts"
+  },
+  "verifier": {
+    "condition": "An attachment is written by a user who no longer owns the document at the moment of the write."
+  },
+  "weakness": "The attach endpoint verifies document ownership, then waits on a slow scan, then writes the attachment without re-verifying, so an ownership transfer that lands in between leaves the document attached to the former owner's project (a check-then-act race).",
+  "vulnerableEndpoint": "POST /api/docs/:id/attach",
+  "seededData": "Users alice, bob, carol, dave. Project 'Studio Team' (alice, carol, dave). Documents d1 and d2 (owner alice) and d3 (owner bob). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Document owner",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Owns the merger documents and belongs to the Studio Team project."
+    }
+  ],
+  "hints": [
+    "Attaching is slower than the other actions. Watch how long it takes and think about what the server is doing during that time.",
+    "Each action is safe when it runs alone. The question is what the server believes at each moment it checks something.",
+    "Start the attach request, and while it is still waiting, send the transfer request. Both must be in flight at the same time."
+  ],
+  "burpNotes": "Compare how long each request takes to answer; Repeater shows response times.",
+  "spoilers": [
+    "at the same time",
+    "in parallel",
+    "/attach"
+  ]
+}

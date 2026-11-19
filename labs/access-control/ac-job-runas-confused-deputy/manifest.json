@@ -1,0 +1,44 @@
+{
+  "id": "ac-job-runas-confused-deputy",
+  "version": "1.0.0",
+  "title": "Ledgerly — Report Builder",
+  "objective": "Reports run as background jobs, and the payroll summary is for finance only. Get report output you are not entitled to, without logging in as someone else.",
+  "family": "access-control",
+  "subcategory": "async-job-authz",
+  "difficulty": "hard",
+  "tags": [
+    "async-jobs",
+    "confused-deputy",
+    "mass-assignment",
+    "access-control"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-job-runas-confused-deputy/server.ts"
+  },
+  "verifier": {
+    "condition": "The creator of a report job downloads output that was produced while the job ran under a different user's identity."
+  },
+  "weakness": "The report worker authorizes datasets for the identity stored on the job as runAs, and the enqueue endpoint takes that value from the client's JSON, so a job can be made to run with another user's privileges (a confused deputy).",
+  "vulnerableEndpoint": "POST /api/report-jobs",
+  "seededData": "Users alice (analyst) and bob (finance) with synthetic expense rows, plus a synthetic payroll dataset. Jobs live in memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Analyst",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Can run the expenses report."
+    }
+  ],
+  "hints": [
+    "Run a normal report and read everything the API tells you about the job, not just its status.",
+    "Think about who the system believes the job is running for, and where that belief comes from.",
+    "The job object has an identity field. Try supplying it yourself when you create the job."
+  ],
+  "burpNotes": "The job is created by one request and finished later by a worker — look at both the request you send and the job object that comes back.",
+  "spoilers": [
+    "runas",
+    "/api/report-jobs"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ac-bulk-export-no-scope",
+  "version": "1.0.0",
+  "title": "PeopleHub — Export Everyone",
+  "objective": "The directory page shows only your own organization's staff. The export feature behind it doesn't know the difference.",
+  "family": "access-control",
+  "subcategory": "bulk-endpoint-authz",
+  "difficulty": "medium",
+  "tags": [
+    "bola",
+    "bulk-export",
+    "multi-tenant",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-bulk-export-no-scope/server.ts"
+  },
+  "verifier": {
+    "condition": "A CSV export requested by a member of one organization contains a row belonging to a different organization."
+  },
+  "weakness": "The paginated directory view correctly scopes results to the caller's own organization, but the separate bulk-export endpoint behind the 'Export CSV' button iterates every record in the system with no organization filter at all.",
+  "vulnerableEndpoint": "GET /api/export/employees.csv (no organization scoping of any kind)",
+  "seededData": "Two organizations, Acme and Globex, each with their own staff list. In-memory.",
+  "credentials": [
+    {
+      "label": "Acme staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "The directory page only ever shows Acme's own staff."
+    }
+  ],
+  "hints": [
+    "Browse the directory page normally and confirm it only ever shows your own organization's people.",
+    "Find the 'Export CSV' button and look at exactly which endpoint it calls — is it the same one the directory page itself uses?",
+    "A feature that exports 'everything' sometimes means exactly that, regardless of which page links to it."
+  ],
+  "spoilers": [
+    "no organization filter"
+  ],
+  "burpNotes": "Sign in and call the export endpoint directly in Repeater, comparing its output against the directory page's own scoped list."
+}

@@ -1,0 +1,44 @@
+{
+  "id": "ac-email-change-body-identity",
+  "version": "1.0.0",
+  "title": "Parcelo — Update Your Contact Details",
+  "objective": "You can edit the email address and phone number on your own account page. Change the contact details on someone else's account.",
+  "family": "access-control",
+  "subcategory": "contact-info-takeover",
+  "difficulty": "medium",
+  "tags": [
+    "account-takeover",
+    "bola",
+    "input-trust",
+    "access-control"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-email-change-body-identity/server.ts"
+  },
+  "verifier": {
+    "condition": "The email address or phone number of an account is changed by a signed-in session that belongs to a different account."
+  },
+  "weakness": "The contact-update endpoint's integrity check compares the account id in the URL with a userId field in the request body (both client-supplied) instead of with the authenticated session, so any signed-in user can rewrite any account's email and phone.",
+  "vulnerableEndpoint": "PATCH /api/accounts/:id/contact",
+  "seededData": "Accounts 1001 alice, 1002 dana, 1003 ben with synthetic emails and phone numbers. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Your own account; its number is shown on the page."
+    }
+  ],
+  "hints": [
+    "Compare what the server lets you read with what it lets you write. Do both decide who you are in the same way?",
+    "Try editing another account and read the error carefully — it tells you what the server believes it is checking.",
+    "The check compares two values that you control in the same request. Make them agree on the other account's id."
+  ],
+  "burpNotes": "Capture the request your own Save sends and look at every field in the body, not only the ones you typed into the form.",
+  "spoilers": [
+    "/contact",
+    "userid"
+  ]
+}

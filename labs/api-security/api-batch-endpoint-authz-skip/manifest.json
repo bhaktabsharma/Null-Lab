@@ -1,0 +1,43 @@
+{
+  "id": "api-batch-endpoint-authz-skip",
+  "version": "1.0.0",
+  "title": "Deskline — Support Tickets",
+  "objective": "A single ticket update correctly checks that it is yours. Change the status of a ticket that belongs to someone else using the bulk-update feature.",
+  "family": "api-security",
+  "subcategory": "batch-endpoint-authz",
+  "difficulty": "medium",
+  "tags": [
+    "batch-apis",
+    "bola",
+    "authorization",
+    "api-security"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-batch-endpoint-authz-skip/server.ts"
+  },
+  "verifier": {
+    "condition": "A batch update actually changes a ticket belonging to a user other than the caller."
+  },
+  "weakness": "The bulk ticket-update endpoint checks that each ticket id in the batch exists, but never that it belongs to the caller, while the single-ticket update endpoint checks ownership correctly.",
+  "vulnerableEndpoint": "POST /api/tickets/batch-update",
+  "seededData": "Two users, each with their own support tickets; ticket ids are simple and sequential. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has two of her own support tickets."
+    }
+  ],
+  "hints": [
+    "Try changing a single ticket that is not yours the normal way, and read how that is refused.",
+    "Now look at the bulk-update feature. Does it refuse the same thing the single-ticket endpoint does?",
+    "Send a batch update whose list of ticket ids includes one that is not yours."
+  ],
+  "burpNotes": "Capture the bulk-update request from the 'close all my resolved tickets' button and edit the list of ids it sends.",
+  "spoilers": [
+    "/api/tickets/batch-update"
+  ]
+}

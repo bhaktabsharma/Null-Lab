@@ -1,0 +1,36 @@
+{
+  "id": "api-excessive-data-exposure",
+  "version": "1.0.0",
+  "title": "ReportAPI — Everything, By Default",
+  "objective": "The dashboard only ever shows a customer's name and plan. Call the API behind it directly and see what else comes back.",
+  "family": "api-security",
+  "subcategory": "api-excessive-data-exposure",
+  "difficulty": "easy",
+  "tags": [
+    "excessive-data-exposure",
+    "api",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-excessive-data-exposure/server.ts"
+  },
+  "verifier": {
+    "condition": "The API response for a customer record contains its internal cost/margin fields, which no part of the UI ever displays."
+  },
+  "weakness": "The API serializes the full internal customer record with no response shape or field filtering, trusting the frontend to only display some of it, so every field is visible to anyone calling the API directly.",
+  "vulnerableEndpoint": "GET /api/customers/:id (returns the complete internal record)",
+  "seededData": "A small customer list, each record carrying public fields plus internal cost/margin fields never rendered anywhere. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Load the dashboard and see exactly which fields it displays for a customer.",
+    "Dashboards are usually built on top of an API. What does that API actually return, versus what the page chooses to show?",
+    "Open the network request the dashboard itself makes and read the full response body, not just what rendered."
+  ],
+  "spoilers": [
+    "internalCostUsd",
+    "marginPercent"
+  ],
+  "burpNotes": "Load the dashboard with Burp running, find the API call it makes for customer data, and read the full JSON response in Proxy history."
+}

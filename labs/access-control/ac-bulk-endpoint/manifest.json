@@ -1,0 +1,42 @@
+{
+  "id": "ac-bulk-endpoint",
+  "version": "1.0.0",
+  "title": "MailRoom — Export Selected",
+  "objective": "Opening someone else's message is refused. Find another way to get the content of messages that aren't yours.",
+  "family": "access-control",
+  "subcategory": "bulk-endpoint-authz",
+  "difficulty": "medium",
+  "tags": [
+    "bulk",
+    "bola",
+    "access-control",
+    "api"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-bulk-endpoint/server.ts"
+  },
+  "verifier": {
+    "condition": "The batch export endpoint returns the content of at least one message owned by a different user than the signed-in one."
+  },
+  "weakness": "The single-item endpoint enforces ownership, but the bulk endpoint that fetches many items by id applies no per-item ownership check.",
+  "vulnerableEndpoint": "POST /api/messages/batch",
+  "seededData": "Users alice (messages 1-3) and bob (messages 4-6) with short synthetic message bodies. In-memory.",
+  "credentials": [
+    {
+      "label": "Mail user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Try opening a message with another user's id first."
+    }
+  ],
+  "hints": [
+    "The single-message endpoint is well protected. Does the inbox page need any other API to do its job?",
+    "Think about what an 'Export selected' feature sends to the server."
+  ],
+  "burpNotes": "Use every feature of the inbox page with Burp running, and look at the request each one sends.",
+  "spoilers": [
+    "messages/batch"
+  ]
+}

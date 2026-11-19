@@ -1,0 +1,43 @@
+{
+  "id": "ac-vertical-role-cookie",
+  "version": "1.0.0",
+  "title": "Brightpath CRM — Role in a Cookie",
+  "objective": "You're a regular CRM user. Reach the administrator-only customer export without anyone granting you the admin role.",
+  "family": "access-control",
+  "subcategory": "vertical-privesc",
+  "difficulty": "beginner",
+  "tags": [
+    "vertical-privesc",
+    "access-control",
+    "cookies",
+    "beginner-friendly"
+  ],
+  "estimatedMinutes": 10,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-vertical-role-cookie/server.ts"
+  },
+  "verifier": {
+    "condition": "The admin customer export is served to a session whose real account role is 'user', because the request carried a client-modified role value."
+  },
+  "weakness": "The server decides who is an administrator from a plain, client-controlled cookie instead of from its own record of the account.",
+  "vulnerableEndpoint": "GET /admin/customers (role read from an unsigned cookie)",
+  "seededData": "Users alice (role user) and an admin account; a few synthetic customer records. In-memory.",
+  "credentials": [
+    {
+      "label": "Sales user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "A regular user — the Admin link is hidden for you."
+    }
+  ],
+  "hints": [
+    "After signing in, look at every cookie the application sets. Which of them describe you, rather than just identify a session?",
+    "Cookies live in your browser — you decide what your browser sends back."
+  ],
+  "burpNotes": "Inspect the Set-Cookie headers on the login response in Proxy history, then experiment with the cookie values your browser sends back. Cookie names end in the lab's port number.",
+  "spoilers": [
+    "role cookie",
+    "role=admin"
+  ]
+}

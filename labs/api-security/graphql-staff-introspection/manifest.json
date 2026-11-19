@@ -1,0 +1,36 @@
+{
+  "id": "graphql-staff-introspection",
+  "version": "1.0.0",
+  "title": "StaffDirectory GraphQL — What Else Is In Here?",
+  "objective": "The app's own pages only ever call one GraphQL query. Find out what else the schema can do, and use it.",
+  "family": "api-security",
+  "subcategory": "graphql-introspection-authz",
+  "difficulty": "hard",
+  "tags": [
+    "graphql",
+    "introspection",
+    "information-disclosure",
+    "api"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/graphql-staff-introspection/server.ts"
+  },
+  "verifier": {
+    "condition": "A mutation discovered only through introspection — never referenced anywhere in the app's own pages or documentation — is successfully called."
+  },
+  "weakness": "Introspection, which lets any caller ask the schema to describe itself, was left enabled in a deployment that also exposes an administrative mutation never linked from the application, so the mutation's existence and exact shape can be discovered without any prior knowledge.",
+  "vulnerableEndpoint": "POST /graphql ({__schema{...}} introspection, then the discovered mutation)",
+  "seededData": "The same GraphQL schema as the field-authorization lab, with one additional mutation not used by any page.",
+  "credentials": [],
+  "hints": [
+    "This app's pages only ever send one specific query. A schema can describe far more than what's actually used.",
+    "GraphQL has a standard, built-in way to ask a server 'what can you do?' — a special field starting with two underscores.",
+    "Once you know a mutation's name and its arguments, calling it is just another POST to the same endpoint."
+  ],
+  "spoilers": [
+    "resetAllPerformanceRatings"
+  ],
+  "burpNotes": "POST a standard GraphQL introspection query to /graphql (query __schema { types { name fields { name } } } or similar) and look through the result for anything not used by the directory page."
+}

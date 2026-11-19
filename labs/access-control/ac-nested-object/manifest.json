@@ -1,0 +1,43 @@
+{
+  "id": "ac-nested-object",
+  "version": "1.0.0",
+  "title": "ProjectHub — Whose Task Is It Really?",
+  "objective": "You belong to one project. Read a task that belongs to a project you are not a member of.",
+  "family": "access-control",
+  "subcategory": "nested-object-authz",
+  "difficulty": "medium",
+  "tags": [
+    "nested-resources",
+    "bola",
+    "access-control",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-nested-object/server.ts"
+  },
+  "verifier": {
+    "condition": "A task belonging to a project the signed-in user is not a member of is returned from GET /api/projects/:pid/tasks/:tid, where :pid is a project the user does belong to."
+  },
+  "weakness": "The API checks membership of the parent project in the URL but loads the child task globally, never confirming the task belongs to that project.",
+  "vulnerableEndpoint": "GET /api/projects/:pid/tasks/:tid",
+  "seededData": "Users alice (project 1) and bob (project 2); a few tasks per project, one of them confidential. In-memory.",
+  "credentials": [
+    {
+      "label": "Project member",
+      "username": "alice",
+      "password": "practice123",
+      "note": "You are a member of project 1 only."
+    }
+  ],
+  "hints": [
+    "The URL contains two ids. Which of them does the server actually verify against your membership?",
+    "Task ids are global across projects, not numbered per project."
+  ],
+  "burpNotes": "Send a legitimate task request to Repeater and study which parts of the URL the server seems to care about.",
+  "spoilers": [
+    "tasks/22",
+    "tasks/21"
+  ]
+}

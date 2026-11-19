@@ -1,0 +1,42 @@
+{
+  "id": "ac-method-switch",
+  "version": "1.0.0",
+  "title": "AuditHub — Same Path, Different Verb",
+  "objective": "The audit log is admin-only and you are not an admin. Read it anyway.",
+  "family": "access-control",
+  "subcategory": "alternate-endpoint-authz-bypass",
+  "difficulty": "medium",
+  "tags": [
+    "http-methods",
+    "access-control",
+    "api",
+    "authorization-bypass"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-method-switch/server.ts"
+  },
+  "verifier": {
+    "condition": "The audit log is returned to a non-admin session through a request method other than GET."
+  },
+  "weakness": "The admin-only check is attached to GET requests only, so the same resource is reachable through another HTTP method that is never checked.",
+  "vulnerableEndpoint": "POST|PUT /api/admin/audit-log (role guard covers GET only)",
+  "seededData": "Users alice (user) and an admin account; six synthetic audit entries. In-memory.",
+  "credentials": [
+    {
+      "label": "Standard user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Admin endpoints answer you with 403."
+    }
+  ],
+  "hints": [
+    "Read the API reference page. Which methods does the audit log endpoint accept?",
+    "A 403 tells you about the request you sent, not about every request that could reach the same code."
+  ],
+  "burpNotes": "Send the denied request to Repeater and experiment with what else the API reference says this resource accepts.",
+  "spoilers": [
+    "audit-log"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "ac-horizontal-uid-cookie",
+  "version": "1.0.0",
+  "title": "FitTrack — Whose Workouts Are These?",
+  "objective": "Read another member's private workout log while signed in as yourself.",
+  "family": "access-control",
+  "subcategory": "horizontal-privesc",
+  "difficulty": "easy",
+  "tags": [
+    "horizontal-privesc",
+    "access-control",
+    "cookies",
+    "identity"
+  ],
+  "estimatedMinutes": 12,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-horizontal-uid-cookie/server.ts"
+  },
+  "verifier": {
+    "condition": "The workout log of a member other than the signed-in one is served, because the request's plain member-id cookie named a different member."
+  },
+  "weakness": "Data lookups trust a plain member-id cookie set at login instead of the server-side session identity, so changing it switches whose data you see.",
+  "vulnerableEndpoint": "GET /me/workouts (member id read from an unsigned cookie)",
+  "seededData": "Members alice (1001), bob (1002), carol (1003) with a few synthetic workouts each. In-memory.",
+  "credentials": [
+    {
+      "label": "Member account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Your own log is at /me/workouts."
+    }
+  ],
+  "hints": [
+    "Compare the cookies you have after signing in. Which one is a signed session and which one is just a value?",
+    "Think about what the page does with a plain value your browser sends — and who controls that value."
+  ],
+  "burpNotes": "Cookie names end in the lab's port number. Compare the cookies you get at login, then change a value in Repeater or the browser's cookie editor and re-request your workouts page.",
+  "spoilers": [
+    "member-id",
+    "member cookie",
+    "member_"
+  ]
+}

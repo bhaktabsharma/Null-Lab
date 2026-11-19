@@ -1,0 +1,45 @@
+{
+  "id": "gql-mutation-guard-gap",
+  "version": "1.0.0",
+  "title": "Helix HR — Team Directory",
+  "objective": "The directory is a GraphQL API: everyone can see colleagues, only HR can see salary bands and manage roles. Give yourself HR access without being in HR.",
+  "family": "access-control",
+  "subcategory": "graphql-mutation-authz",
+  "difficulty": "hard",
+  "tags": [
+    "graphql",
+    "mutations",
+    "resolver-authz",
+    "access-control"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/gql-mutation-guard-gap/server.ts"
+  },
+  "verifier": {
+    "condition": "An employee's role is changed through the GraphQL API by a signed-in user whose own role is not HR."
+  },
+  "weakness": "Role checks are a wrapper applied to the Query resolvers only, so the Mutation resolver that changes an employee's role runs for any signed-in user.",
+  "vulnerableEndpoint": "POST /graphql (mutation setEmployeeRole)",
+  "seededData": "Employees alice (employee), hana (hr), marcus, ivy. Schema introspection is disabled. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Employee",
+      "username": "alice",
+      "password": "practice123",
+      "note": "An employee without HR access."
+    }
+  ],
+  "hints": [
+    "The page's JavaScript is delivered to every user. Read it — including the parts you are never shown rendered.",
+    "Authorization can live in different places in a GraphQL server. Test the operations that change data as carefully as the ones that read it.",
+    "Call the HR-only operation from your own session. The server will help with field names if you get one slightly wrong."
+  ],
+  "burpNotes": "Send queries from Repeater to the GraphQL endpoint the page uses. The page's own script shows which operations the front end knows about.",
+  "spoilers": [
+    "setemployeerole",
+    "setrole",
+    "mutation ("
+  ]
+}

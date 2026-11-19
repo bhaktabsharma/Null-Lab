@@ -1,0 +1,44 @@
+{
+  "id": "ac-workflow-edit-after-approval",
+  "version": "1.0.0",
+  "title": "ExpenseDesk — Approved Is Not Final",
+  "objective": "Your expense was approved for a small amount. Get reimbursed for a much larger one — without a manager ever approving it.",
+  "family": "access-control",
+  "subcategory": "workflow-step-authz",
+  "difficulty": "hard",
+  "tags": [
+    "workflow",
+    "business-logic",
+    "state-machine",
+    "access-control",
+    "api"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-workflow-edit-after-approval/server.ts"
+  },
+  "verifier": {
+    "condition": "A payout succeeds for an expense whose current amount differs from the amount a manager approved."
+  },
+  "weakness": "The approval step is not final: the owner can still modify an approved expense, so the amount paid is no longer the amount that was approved.",
+  "vulnerableEndpoint": "PATCH /api/expenses/:id (allowed in status 'approved') then POST /api/expenses/:id/pay",
+  "seededData": "Users alice (employee) and bob (manager). Alice has one submitted expense (E-100) and one already-approved expense (E-101, 62.40). In-memory.",
+  "credentials": [
+    {
+      "label": "Employee",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Approval requires a manager — you cannot approve your own claims."
+    }
+  ],
+  "hints": [
+    "You cannot approve anything yourself, and you cannot pay something that is not approved. Which other actions does the API offer on an expense?",
+    "Ask what the server checks at each step — and what it doesn't re-check afterwards."
+  ],
+  "burpNotes": "Walk through every action the page offers, then look for operations the page doesn't expose but the API pattern suggests. Compare the amount fields in responses before and after each step.",
+  "spoilers": [
+    "PATCH",
+    "after approval"
+  ]
+}

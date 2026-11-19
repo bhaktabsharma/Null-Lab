@@ -1,0 +1,44 @@
+{
+  "id": "ac-clone-cross-tenant",
+  "version": "1.0.0",
+  "title": "Folio — Import From Another Project",
+  "objective": "Your organization's projects are private to you, and the app refuses to show you other organizations' projects. Read the notes of a project that belongs to a different organization.",
+  "family": "access-control",
+  "subcategory": "cross-tenant-reference",
+  "difficulty": "medium",
+  "tags": [
+    "multi-tenancy",
+    "idor",
+    "nested-apis",
+    "access-control"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-clone-cross-tenant/server.ts"
+  },
+  "verifier": {
+    "condition": "Notes from a project in a different organization are copied into a project of the caller's organization."
+  },
+  "weakness": "The project-import action looks up its source project by id globally and never compares its organization with the caller's, while the project read endpoint does, so notes can be copied across tenants.",
+  "vulnerableEndpoint": "POST /api/orgs/:org/projects/:id/import",
+  "seededData": "Organizations northwind (alice) and contoso (dana) with two synthetic projects each, ids p-101 and p-102, p-201 and p-202. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Northwind member",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Belongs to the northwind organization only."
+    }
+  ],
+  "hints": [
+    "Check that the project endpoints really keep organizations apart by asking for a project in another organization directly.",
+    "Look at every action that takes a second project id as input, not only the ones that read a project by its URL.",
+    "Import notes into one of your own projects, naming a project from another organization as the source. Project ids are sequential."
+  ],
+  "burpNotes": "Explore every action in the page and note which ones take a project id from the request body rather than from the URL.",
+  "spoilers": [
+    "/import",
+    "fromprojectid"
+  ]
+}

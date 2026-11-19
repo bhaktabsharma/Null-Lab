@@ -1,0 +1,51 @@
+{
+  "id": "idor-order-tamper",
+  "version": "1.0.0",
+  "title": "ShopMart — Order Address Tamper",
+  "objective": "Find a way to change the shipping address on an order that isn't yours.",
+  "family": "access-control",
+  "subcategory": "idor",
+  "difficulty": "easy",
+  "tags": [
+    "idor",
+    "access-control",
+    "write-based",
+    "shopmart"
+  ],
+  "estimatedMinutes": 20,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/idor-order-tamper/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/idor-order-tamper",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A session authenticated as one customer successfully changes the shipping address of an order belonging to a different customer via POST /orders/:id/address.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [
+    {
+      "label": "Customer account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in and edit your own order's address first to see the normal flow."
+    }
+  ],
+  "weakness": "An order's shipping address can be rewritten by any signed-in customer because the write handler never checks order ownership.",
+  "vulnerableEndpoint": "POST /orders/:id/address",
+  "seededData": "Customers alice (order 501) and bob (502, 503); in-memory.",
+  "spoilers": [
+    "/orders/"
+  ],
+  "solutionHint": "The edit-address form posts to /orders/<id>/address. Nothing about that request proves the order is yours — what if you point it at someone else's order id instead?"
+}

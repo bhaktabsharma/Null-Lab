@@ -1,0 +1,43 @@
+{
+  "id": "api-pagination-authz-gap",
+  "version": "1.0.0",
+  "title": "TicketsAPI — Page Through Everything",
+  "objective": "The ticket list correctly shows only your own tickets at the default page size. Use pagination to see somebody else's.",
+  "family": "api-security",
+  "subcategory": "api-excessive-data-exposure",
+  "difficulty": "hard",
+  "tags": [
+    "pagination",
+    "authorization",
+    "api",
+    "idor"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-pagination-authz-gap/server.ts"
+  },
+  "verifier": {
+    "condition": "A ticket owned by a different user than the caller is returned in a paginated list response."
+  },
+  "weakness": "The ownership filter is applied to a page of results taken from the full ticket list, not to the full list before paging, so requesting a page beyond the caller's own tickets returns other users' tickets instead of an empty page.",
+  "vulnerableEndpoint": "GET /api/tickets?limit=&offset= (filters AFTER slicing the page, not before)",
+  "seededData": "Users alice (2 tickets) and bob (2 tickets) in one underlying list ordered by creation time. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "The default view shows exactly your own tickets."
+    }
+  ],
+  "hints": [
+    "List your tickets at the default page size first and confirm you only ever see your own.",
+    "Now try a larger limit, or a non-zero offset. Does the page you get still only contain your tickets?",
+    "The filter for 'is this mine' and the slicing for 'which page is this' might not be happening in the order you'd expect."
+  ],
+  "spoilers": [
+    "slice before filter"
+  ],
+  "burpNotes": "Vary limit and offset directly in Repeater and check whether every ticket in the returned page still belongs to you."
+}

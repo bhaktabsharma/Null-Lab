@@ -1,0 +1,37 @@
+{
+  "id": "api-key-no-rate-limit",
+  "version": "1.0.0",
+  "title": "KeyVault API — Unlimited Key Checks",
+  "objective": "Partner API keys are short and this endpoint has no rate limit at all. Find a valid key.",
+  "family": "api-security",
+  "subcategory": "api-rate-limiting",
+  "difficulty": "medium",
+  "tags": [
+    "rate-limiting",
+    "api-key",
+    "brute-force",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-key-no-rate-limit/server.ts"
+  },
+  "verifier": {
+    "condition": "A valid partner API key is found after more validation attempts than any reasonable rate limit would have allowed."
+  },
+  "weakness": "The key-validation endpoint has no attempt limiting of any kind, and the key format is short enough to be exhaustively searched in a bounded amount of time.",
+  "vulnerableEndpoint": "POST /api/partners/validate-key (no attempt limiting of any kind)",
+  "seededData": "One partner API key in the format PK-NNNN (a 4-digit code), different each instance.",
+  "credentials": [],
+  "hints": [
+    "Try a handful of wrong keys in a row. Does anything about the response change — a delay, a lockout, a CAPTCHA?",
+    "The key format is short and entirely numeric in its variable part. How many possibilities does that leave?",
+    "Script the attempts — this isn't meant to be done by hand."
+  ],
+  "spoilers": [
+    "PK-0000",
+    "PK-9999"
+  ],
+  "burpNotes": "Use Intruder with a 4-digit numeric payload (0000-9999) against the key parameter, or script it directly."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "ac-forced-browsing",
+  "version": "1.0.0",
+  "title": "Halden Staff Portal — Unlinked Admin Tools",
+  "objective": "The staff portal has an internal tools area that was never meant for public eyes. Find it and retrieve the payroll export without being an administrator.",
+  "family": "access-control",
+  "subcategory": "forced-browsing",
+  "difficulty": "beginner",
+  "tags": [
+    "forced-browsing",
+    "access-control",
+    "information-disclosure",
+    "beginner-friendly"
+  ],
+  "estimatedMinutes": 10,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-forced-browsing/server.ts"
+  },
+  "verifier": {
+    "condition": "The payroll export resource is served to a request that does not carry an administrator session (either no session at all, or a non-admin staff session)."
+  },
+  "weakness": "A sensitive admin page is protected only by being unlinked; its URL can be discovered and requested directly with no authorization check.",
+  "vulnerableEndpoint": "GET /staff-tools-4821/payroll-export",
+  "seededData": "Staff user alice (non-admin) and an admin account; a small synthetic payroll table. In-memory, rebuilt on every start.",
+  "credentials": [
+    {
+      "label": "Staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Optional — the news page is public."
+    }
+  ],
+  "hints": [
+    "Not every page on a site is linked from its navigation. What do sites publish to tell crawlers where NOT to look?",
+    "Once you find a directory name, think about what else could live under it."
+  ],
+  "burpNotes": "Browse the site normally with Burp running, then look at what paths the responses mention. A content-discovery wordlist against the target also works. The solve is recorded server-side when the restricted resource itself is served.",
+  "spoilers": [
+    "staff-tools-4821",
+    "payroll-export"
+  ]
+}

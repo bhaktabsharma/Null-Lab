@@ -1,0 +1,44 @@
+{
+  "id": "gql-alias-cost-abuse",
+  "version": "1.0.0",
+  "title": "QuoteVault — Stock Quotes",
+  "objective": "Premium quotes are capped at 3 per request to control cost. Get more than 3 premium quotes from a single request.",
+  "family": "api-security",
+  "subcategory": "graphql-alias-abuse",
+  "difficulty": "hard",
+  "tags": [
+    "graphql",
+    "aliases",
+    "rate-limiting",
+    "api-security"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/gql-alias-cost-abuse/server.ts"
+  },
+  "verifier": {
+    "condition": "A single GraphQL operation actually executes the premium-quote field more than the stated per-request limit."
+  },
+  "weakness": "The cost limiter counts the number of DISTINCT FIELD NAMES in the query before running it, so a query that only ever asks for one field name is always counted as 1 — no matter how many times that field is selected under different aliases, each of which still executes separately.",
+  "vulnerableEndpoint": "POST /graphql",
+  "seededData": "A free-tier account with unlimited free quotes and a 3-per-request premium quote cap. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "On the free tier."
+    }
+  ],
+  "hints": [
+    "Send a few premium-quote requests the normal way and see exactly when the limit kicks in.",
+    "GraphQL lets you ask for the same field more than once in a single query, each time under a different name you choose.",
+    "Write one query that selects the premium-quote field more than 3 times, giving each selection its own name."
+  ],
+  "burpNotes": "Build the query by hand in Repeater: GraphQL lets you give the same field a different name each time you select it, and each one still executes on its own.",
+  "spoilers": [
+    "alias1:",
+    "alias2:"
+  ]
+}

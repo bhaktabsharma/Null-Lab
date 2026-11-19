@@ -1,0 +1,51 @@
+{
+  "id": "ac-downgrade-stale-claim",
+  "version": "1.0.0",
+  "title": "Notely — Shared Notes",
+  "objective": "Administrators can downgrade members to read-only. A member whose rights were just removed should not be able to keep editing. Keep editing anyway.",
+  "family": "access-control",
+  "subcategory": "permission-downgrade",
+  "difficulty": "medium",
+  "tags": [
+    "sessions",
+    "role-changes",
+    "revocation",
+    "access-control"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-downgrade-stale-claim/server.ts"
+  },
+  "verifier": {
+    "condition": "A note edit is accepted for a user whose current role is below editor."
+  },
+  "weakness": "The note-writing endpoints authorize from the role claim stored in the signed session cookie at login rather than from the member's current role, so a downgrade does not take effect for sessions that already exist.",
+  "vulnerableEndpoint": "PUT /api/notes/:id",
+  "seededData": "Members ben (editor), tess (admin) and alice (viewer) with two shared notes. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Editor",
+      "username": "ben",
+      "password": "Editor-Notely!81",
+      "note": "Can edit notes."
+    },
+    {
+      "label": "Administrator",
+      "username": "tess",
+      "password": "Admin-Notely!82",
+      "note": "Can change other members' roles."
+    }
+  ],
+  "hints": [
+    "You have two accounts: an editor and an administrator. Think about the order of events, not just the endpoints.",
+    "After the administrator changes the role, check what the app says your role is — and what it still lets you do.",
+    "Keep the editor's session open, downgrade that user from the administrator's session, then try an edit with the old session."
+  ],
+  "burpNotes": "Use two separate browser contexts so each account keeps its own session. Compare what the app reports about your role with what it allows.",
+  "spoilers": [
+    "role claim",
+    "stale claim",
+    "/api/notes/"
+  ]
+}

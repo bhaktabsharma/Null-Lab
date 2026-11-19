@@ -1,0 +1,36 @@
+{
+  "id": "graphql-staff-field-authz",
+  "version": "1.0.0",
+  "title": "StaffDirectory GraphQL — Query What You Want",
+  "objective": "The REST-style directory page only ever shows name and title. The same data is also available over GraphQL — ask it for fields the page never requests.",
+  "family": "api-security",
+  "subcategory": "graphql-introspection-authz",
+  "difficulty": "medium",
+  "tags": [
+    "graphql",
+    "field-level-authorization",
+    "api",
+    "excessive-data-exposure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/graphql-staff-field-authz/server.ts"
+  },
+  "verifier": {
+    "condition": "A GraphQL response to a non-HR caller includes the salary or performanceRating field of an employee."
+  },
+  "weakness": "A GraphQL field resolver returns its value directly with no check of the caller's role, trusting that the UI simply never asks for it — but GraphQL lets any caller request any field the schema exposes.",
+  "vulnerableEndpoint": "POST /graphql (query { employee(id) { salary performanceRating } })",
+  "seededData": "A real GraphQL schema and resolvers (the graphql npm package — no mocked protocol) over five synthetic employees.",
+  "credentials": [],
+  "hints": [
+    "The directory page only ever asks for name and title. GraphQL lets the caller choose which fields to ask for, not just the server.",
+    "Look at the Employee type's other fields — a schema describes everything available, not just what one page happens to use.",
+    "Send your own query selecting exactly the fields you want, including ones the page's own query never requests."
+  ],
+  "spoilers": [
+    "performanceRating"
+  ],
+  "burpNotes": "Send a POST to /graphql with a JSON body like {\"query\":\"{ employee(id: 2) { name salary } }\"} and read the response directly — no special GraphQL tooling needed."
+}

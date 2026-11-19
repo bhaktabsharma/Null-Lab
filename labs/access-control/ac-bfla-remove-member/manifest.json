@@ -1,0 +1,42 @@
+{
+  "id": "ac-bfla-remove-member",
+  "version": "1.0.0",
+  "title": "Teamboard — The Button You Can't See",
+  "objective": "Only admins get a Remove button on the team page. Remove a team member anyway, as a regular member.",
+  "family": "access-control",
+  "subcategory": "broken-function-level-authz",
+  "difficulty": "easy",
+  "tags": [
+    "bfla",
+    "access-control",
+    "api",
+    "client-side-controls"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-bfla-remove-member/server.ts"
+  },
+  "verifier": {
+    "condition": "A member removal request succeeds for a session whose role is 'member' (not admin)."
+  },
+  "weakness": "An admin-only API function is hidden in the UI but the server only checks that the caller is logged in, not that they are an admin.",
+  "vulnerableEndpoint": "POST /api/members/:id/remove",
+  "seededData": "Members alice (member), tess (admin), ben, dana, eli. In-memory; removals reset with the instance.",
+  "credentials": [
+    {
+      "label": "Team member",
+      "username": "alice",
+      "password": "practice123",
+      "note": "You will not see any Remove buttons."
+    }
+  ],
+  "hints": [
+    "A page's JavaScript is delivered to every user, whatever they are allowed to do. What can you learn about the API from it?",
+    "Hiding a control is not the same as refusing the request behind it."
+  ],
+  "burpNotes": "Open the team page with Burp running and read the page's inline script. You can then craft the request in Repeater with your own session cookie.",
+  "spoilers": [
+    "/remove"
+  ]
+}

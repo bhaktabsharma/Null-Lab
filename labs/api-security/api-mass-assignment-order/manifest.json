@@ -1,0 +1,36 @@
+{
+  "id": "api-mass-assignment-order",
+  "version": "1.0.0",
+  "title": "OrdersAPI — Create Order",
+  "objective": "Create an order normally, then create one where the client's own values for server-computed fields simply overwrite what the server just calculated.",
+  "family": "api-security",
+  "subcategory": "api-mass-assignment",
+  "difficulty": "medium",
+  "tags": [
+    "mass-assignment",
+    "api",
+    "over-posting"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-mass-assignment-order/server.ts"
+  },
+  "verifier": {
+    "condition": "A created order's stored status is 'shipped' or its stored total differs from price times quantity, set directly from the request body after the server computed its own values."
+  },
+  "weakness": "After computing the order's real total and default status, the handler merges the entire original request body back onto the record, so any field the client supplied — including ones the server just set itself — ends up overwriting the computed value.",
+  "vulnerableEndpoint": "POST /api/orders (server-computed fields are overwritten by a later merge of the raw request body)",
+  "seededData": "One product, a $80 keyboard, in a fixed catalog. In-memory order store.",
+  "credentials": [],
+  "hints": [
+    "Create a normal order and look at its full JSON response — what fields does the server appear to compute itself?",
+    "Those same field names are plain JSON properties. What happens if your request body already contains one of them?",
+    "An order that was never paid for doesn't usually start out 'shipped'."
+  ],
+  "spoilers": [
+    "status\":\"shipped",
+    "totalUsd override"
+  ],
+  "burpNotes": "Send a normal order creation request to Repeater, then add the server-computed field names directly into your JSON body with your own values."
+}

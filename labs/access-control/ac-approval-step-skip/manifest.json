@@ -1,0 +1,51 @@
+{
+  "id": "ac-approval-step-skip",
+  "version": "1.0.0",
+  "title": "Spendly — Purchase Approvals",
+  "objective": "Large purchases need a manager's approval and then finance's before they are paid. You are a line manager. Get a payment released that finance never approved.",
+  "family": "access-control",
+  "subcategory": "approval-chain-authz",
+  "difficulty": "medium",
+  "tags": [
+    "workflow",
+    "approvals",
+    "separation-of-duties",
+    "access-control"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-approval-step-skip/server.ts"
+  },
+  "verifier": {
+    "condition": "A payout is released on a finance approval that was recorded by a user whose role is not finance."
+  },
+  "weakness": "The finance approval step checks only that the caller is some kind of approver and that a manager has already approved, never that the caller holds the finance role, so a manager can record the finance approval and release the payout.",
+  "vulnerableEndpoint": "POST /api/requests/:id/approve",
+  "seededData": "Users mia (manager), fred (finance), alice (requester) and two purchase requests: r1 submitted, r2 already manager-approved. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Line manager",
+      "username": "mia",
+      "password": "Mgr-Spendly!91",
+      "note": "Approves the first step."
+    },
+    {
+      "label": "Finance approver",
+      "username": "fred",
+      "password": "Fin-Spendly!92",
+      "note": "Approves the second step and releases payment."
+    }
+  ],
+  "hints": [
+    "Do the manager step on a request and watch exactly what the browser sends. The finance step has its own button, shown only to finance users.",
+    "Compare what each step's endpoint demands of the caller. Are they the same demands?",
+    "Replay the approval request with the finance step selected, from your manager session."
+  ],
+  "burpNotes": "Capture an approval from each role and compare the two requests. The page decides which buttons to show; the server decides what to accept.",
+  "spoilers": [
+    "\"step\":\"finance\"",
+    "\"step\": \"finance\"",
+    "/approve"
+  ]
+}

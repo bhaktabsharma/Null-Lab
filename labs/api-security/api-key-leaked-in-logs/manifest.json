@@ -1,0 +1,35 @@
+{
+  "id": "api-key-leaked-in-logs",
+  "version": "1.0.0",
+  "title": "WeatherAPI — Keys in the Open",
+  "objective": "WeatherAPI accepts your key as a query parameter for convenience. Find out where that choice leaves a trace, then use what you find there.",
+  "family": "api-security",
+  "subcategory": "api-excessive-data-exposure",
+  "difficulty": "medium",
+  "tags": [
+    "api-key",
+    "information-disclosure",
+    "logging"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-key-leaked-in-logs/server.ts"
+  },
+  "verifier": {
+    "condition": "A weather request succeeds using an API key that was never issued to the caller, obtained from the request log."
+  },
+  "weakness": "Accepting the API key as a query parameter means it becomes part of the full request URL, and a separate request-log feature records full URLs verbatim, so anyone who can read that log can recover any key sent this way.",
+  "vulnerableEndpoint": "GET /api/weather?key=... then GET /api/request-log (records full URLs including query strings)",
+  "seededData": "Two issued API keys, one for a 'demo' partner and a separate, more privileged 'internal-tools' key. In-memory request log.",
+  "credentials": [],
+  "hints": [
+    "Make a weather request with your own demo key and see what it returns.",
+    "This API offers a request log, seemingly for debugging. What does an entry in it actually contain?",
+    "Someone else's request appears in that same log, with their key in it."
+  ],
+  "spoilers": [
+    "internal-tools key"
+  ],
+  "burpNotes": "Fetch /api/request-log directly and look for another caller's full request URL, including its query string."
+}

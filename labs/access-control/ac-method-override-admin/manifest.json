@@ -1,0 +1,45 @@
+{
+  "id": "ac-method-override-admin",
+  "version": "1.0.0",
+  "title": "Helpdesk — Customer Records",
+  "objective": "Only administrators can delete customer records. You are a support agent. Delete one anyway.",
+  "family": "access-control",
+  "subcategory": "method-override-authz",
+  "difficulty": "medium",
+  "tags": [
+    "http-methods",
+    "method-override",
+    "function-level-authz",
+    "access-control"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/access-control/ac-method-override-admin/server.ts"
+  },
+  "verifier": {
+    "condition": "A customer record is deleted by a signed-in user whose role is not admin."
+  },
+  "weakness": "The administrator check is a hook keyed on the request's HTTP method (DELETE), while the POST update handler honors an X-HTTP-Method-Override: DELETE header internally, so the guard never sees the destructive method.",
+  "vulnerableEndpoint": "POST /api/customers/:id (X-HTTP-Method-Override: DELETE)",
+  "seededData": "Users alice (agent) and tess (admin) and four synthetic customer records. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Support agent",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Can add notes to customer records."
+    }
+  ],
+  "hints": [
+    "Try the delete as an agent and read how the refusal is worded. Then ask what exactly the app looked at to decide you were not allowed.",
+    "Web frameworks sometimes let a client choose which HTTP method a request is treated as.",
+    "Send the update request as POST and add a header saying the method should be treated as DELETE."
+  ],
+  "burpNotes": "Send the same action with different HTTP methods and compare the responses. Capture the normal agent actions first so you know which endpoints exist.",
+  "spoilers": [
+    "x-http-method-override",
+    "method-override",
+    "_method"
+  ]
+}

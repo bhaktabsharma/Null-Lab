@@ -1,0 +1,42 @@
+{
+  "id": "api-content-type-validation-bypass",
+  "version": "1.0.0",
+  "title": "ProfileHub — Edit Profile",
+  "objective": "Your profile has a role field that the edit form cannot touch. Change your own role to admin.",
+  "family": "api-security",
+  "subcategory": "content-type-validation",
+  "difficulty": "medium",
+  "tags": [
+    "content-type",
+    "mass-assignment",
+    "api-security"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/api-security/api-content-type-validation-bypass/server.ts"
+  },
+  "verifier": {
+    "condition": "An account's role is changed to admin through a request whose Content-Type is not application/json."
+  },
+  "weakness": "A JSON request body is picked apart field by field, allowing only displayName and bio — but a fallback path added for clients that send a different Content-Type parses the whole body itself and applies every field on it with no such restriction.",
+  "vulnerableEndpoint": "PATCH /api/profile",
+  "seededData": "One account with displayName, bio and a role that starts as \"user\". In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Role starts as \"user\"."
+    }
+  ],
+  "hints": [
+    "Edit your profile normally first and look closely at the request the form sends, headers included.",
+    "The same endpoint may not treat every request the same way. What could make it behave differently?",
+    "Send the update with a different Content-Type header, and with the full object you want applied as the raw body."
+  ],
+  "burpNotes": "Repeat the normal profile-update request with its Content-Type header changed, and an extra field added to the body.",
+  "spoilers": [
+    "content-type: text/plain"
+  ]
+}
