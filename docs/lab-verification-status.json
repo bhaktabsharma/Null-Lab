@@ -1,0 +1,1066 @@
+{
+  "_comment": "Mostly hand-maintained; `verifiedViaProxy` is generated from a real `npm run test:proxy` run by `npm run proxy:status -- --write` and checked against that run (it fails if the two disagree). Add an entry here when a lab's automated tests + manual verification are actually done — the coverage matrix script (scripts/print-coverage-matrix.ts) will otherwise show that lab as implemented-but-unverified rather than assuming it's covered.",
+  "idor-invoice-leak": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/idor-invoice-leak.test.ts"
+  },
+  "idor-order-tamper": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/idor-order-and-ticket.test.ts"
+  },
+  "idor-support-ticket": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/idor-order-and-ticket.test.ts"
+  },
+  "sqli-product-search": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/sqli.test.ts"
+  },
+  "sqli-login-bypass": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/sqli.test.ts"
+  },
+  "sqli-blind-report": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/sqli.test.ts"
+  },
+  "xss-reflected-search": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/xss-reflected.test.ts",
+    "note": "Verified via the real control plane + a real headless-browser admin bot. Not separately re-verified by hand through Burp — the underlying HTTP surface is identical to the other labs, which were."
+  },
+  "xss-stored-ticket": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/xss-stored.test.ts"
+  },
+  "xss-stored-review": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/xss-stored.test.ts"
+  },
+  "ac-forced-browsing": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-vertical-role-cookie": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-horizontal-uid-cookie": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-bfla-remove-member": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-method-switch": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-uuid-leak": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-nested-object": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-bulk-endpoint": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-bopla-fields": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-tenant-header": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-workflow-edit-after-approval": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/access-control-batch1.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sqli-error-based": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch2.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sqli-order-by": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch2.test.ts",
+    "note": "Test performs a REAL blind extraction (binary search over a timing or row-order oracle) to recover the per-instance secret, then submits it — not just a boolean exploit check. Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "nosql-operator-injection": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "cmdi-mock-diagnostics": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ssti-mock-template": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "log-injection-crlf": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sqli-time-based": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch2.test.ts",
+    "note": "Test performs a REAL blind extraction (binary search over a timing or row-order oracle) to recover the per-instance secret, then submits it — not just a boolean exploit check. Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sqli-second-order": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ldap-injection-mock": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "xpath-injection-login": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/injection-batch3.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client; no browser-driven or proxy/Burp test yet. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "xss-dom-hash-sink": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/client-side-batch4.test.ts",
+    "note": "Exploit driven through the real headless-browser admin-bot (navigates with a crafted URL fragment; the page's own client-side script must execute and exfiltrate). Negative cases: plain visit, harmless fragment, and a non-exploiting fragment via the real bot all confirmed NOT to solve it. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "open-redirect-login-next": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/client-side-batch4.test.ts",
+    "note": "Exploit + negative cases (internal next, failed login) driven by a raw HTTP client, checking the resolved host of the redirect Location, not just string matching. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "cors-reflect-credentials": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/client-side-batch4.test.ts",
+    "note": "Verified server-side via a raw HTTP client sending a foreign Origin header with and without a valid session — the vulnerability is in what the server sends back, not browser enforcement, so no browser is needed to prove it. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "clickjack-admin-action": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/client-side-batch4.test.ts",
+    "note": "Exploit driven through the real headless-browser admin-bot performing an ACTUAL pointer click (page.mouse.click at real screen coordinates, not a selector-targeted click) at the decoy's on-screen position; proven to land on the real framed button. Negative cases: direct visit to the real page (no click) and the decoy page WITHOUT the iframe both confirmed NOT to solve it. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-reset-predictable-token": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative cases (own reset, single-use enforcement) driven by a raw HTTP client; recovers the admin token by searching a small range around a legitimately-issued token. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-session-fixation": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative case (organic login never solves it) driven by a raw HTTP client; fires at the real login step, no separate verify call. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-logout-doesnt-invalidate": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative cases (session works pre-logout, cookie genuinely cleared client-side) driven by a raw HTTP client; replays the captured token post-logout. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-jwt-alg-none": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative cases (real HS256 token, garbage token, valid token without admin role) driven by a raw HTTP client; hand-builds an alg:none token and forges the admin claim. Mutation-checked: fixing the verifier's alg:none branch makes this test fail. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-mfa-step-skip": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + a full legitimate MFA completion on a SEPARATE instance (proven not to solve it) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-username-enumeration": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative cases (decoy usernames) driven by a raw HTTP client, diffing status code and message. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-oauth-redirect-uri": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative cases (registered callback, totally unrelated host) driven by a raw HTTP client against the in-process mock identity provider. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-remember-me-predictable": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit + negative case (the account's own legitimately-issued remember token) driven by a raw HTTP client; computes a second account's token from the known formula. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-no-rate-limit-login": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/auth-session-batch5.test.ts",
+    "note": "Exploit is a REAL exhaustive brute force (up to 1000 requests) against the live target, not a simulated one; negative case confirms no lockout triggers during the attempt. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ssrf-logo-fetch": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit + negative cases (normal external URL, an unregistered/unreachable host) driven by a raw HTTP client against the simulated internal network. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "ssrf-weather-substring-bypass": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit + negative cases (real partner, unrelated host rejected) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "ssrf-blocklist-ip-encoding": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit + negative cases (every obvious loopback spelling blocked) driven by a raw HTTP client; uses Node's real URL-parsing normalization of decimal/hex IPv4 forms, verified independently in tests/unit/mock-internal-net.test.ts. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "ssrf-webhook-blind-callback": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit proven via an out-of-band side effect (a counter on the simulated internal service), not via the checker's own response, which is identical on every call by design — a genuinely blind-SSRF-shaped test, not a stand-in. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "ssrf-webhook-destination-abuse": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit + negative case (delivery to the legitimate external-looking merchant host) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "ssrf-linkpreview-redirect": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/ssrf-batch6.test.ts",
+    "note": "Exploit + negative cases (non-allowlisted host rejected outright, the real allowlisted host behaves normally) driven by a raw HTTP client; the redirect hop is itself simulated (no real HTTP redirect involved). Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never performs a real network call — see SECURITY.md."
+  },
+  "fh-path-traversal-download": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative cases (normal receipt, unknown file) driven by a raw HTTP client against the simulated filesystem. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "fh-encoded-traversal": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative case (literal ../ correctly rejected) driven by a raw HTTP client; confirms single encoding alone is also rejected before proving the double-encoded bypass. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "fh-lfi-template-include": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative cases driven by a raw HTTP client against the simulated filesystem. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "fh-upload-extension-bypass": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative cases (real image accepted, plain text rejected, traversal in filename rejected) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "fh-zip-slip-extract": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative case (well-behaved package stays contained) driven by a raw HTTP client against the simulated archive-extraction step. Mutation-checked: adding the missing containment check makes this test fail. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "fh-backup-file-exposure": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/file-handling-batch7.test.ts",
+    "note": "Exploit + negative cases (real pages serve normally, unknown file 404s) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts. Safety: this lab never touches the real filesystem — see SECURITY.md."
+  },
+  "sl-deserialization-trusted-types": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit + negative case (importing the two real preference types never grants admin) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-mass-assignment-profile": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit + negative case (a normal field update never changes role) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-price-negative-quantity": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit + negative case (a normal positive-quantity order) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-price-client-trusted": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit + negative cases (the real price, a rejected negative price) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-workflow-skip-payment": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit + a full legitimate booking flow on a SEPARATE instance (proven not to solve it) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-race-coupon-reuse": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit is a REAL concurrent burst (Promise.all of 8 simultaneous requests) against the live target, not a simulated one; a correctly-refused SEQUENTIAL retry is confirmed not to solve it. Mutation-checked pattern: see sl-race-inventory-oversell. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-race-giftcard-overdraft": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit is a REAL concurrent burst against the live target; sequential withdrawals respecting the balance are confirmed not to solve it. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-race-inventory-oversell": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/server-logic-batch8.test.ts",
+    "note": "Exploit is a REAL concurrent burst against the live target; a sequential second order is confirmed to be correctly refused. Mutation-checked: moving the decrement before the await (closing the race) makes this test fail. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-excessive-data-exposure": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "The dashboard's own real API call already demonstrates the exposure; verified by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-key-no-rate-limit": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit is a REAL exhaustive search (up to 10,000 requests) against the live target; negative case confirms no lockout. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-mass-assignment-order": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit + negative case (a normal order's computed fields) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-version-inconsistency": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit + negative case (v2 correctly refusing the identical request) driven by a raw HTTP client in the same test. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-pagination-authz-gap": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit + negative case (the default, correctly-scoped page) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-key-leaked-in-logs": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit + negative case (the caller's own demo key) driven by a raw HTTP client; recovers a second key from the log and uses it for a real, successful call. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "graphql-staff-field-authz": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit + negative case driven against a REAL graphql-package schema and resolver (query parsing/validation/execution all run for real) via a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "graphql-staff-introspection": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit performs a REAL __schema introspection query against the real graphql package, then calls the discovered mutation; negative case (the app's own query) confirmed not to solve it. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "websocket-chat-origin-cswsh": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/api-security-batch9.test.ts",
+    "note": "Exploit uses a REAL ws client completing a REAL WebSocket handshake (not simulated) with a foreign Origin header and a captured session cookie; negative case (same-origin connection) confirmed not to solve it. Mutation-checked: disabling the Origin check makes this test fail (as expected, since there is nothing left to distinguish). Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "mp-prototype-pollution-admin": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Purely client-side vulnerability; exploit verified via the REAL headless-browser admin-bot (the JS actually runs), including a baseline visit with a harmless payload that confirms isAdmin() stays false. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "mc-host-header-reset-poisoning": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative case driven with node:http directly (not fetch — the Fetch spec forbids scripts from setting the Host header, same as a real browser), which is the only way to genuinely forge it outside a proxy like Burp. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "xp-svg-upload-stored-xss": {
+    "testsPassing": true,
+    "verifiedBuiltIn": true,
+    "verifiedExternalClient": false,
+    "verifiedViaProxy": false,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative case (a harmless SVG) driven through the real headless-browser admin-bot; first implementation used <object> embedding, which creates an isolated nested document the payload couldn't escape — caught by the test, fixed by inlining the SVG's raw markup into the page instead, which is also the more realistic real-world vector. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ssrf-cloud-metadata-widget": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative case driven by a raw HTTP client against the simulated internal network. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "auth-jwt-weak-secret": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit performs a REAL offline HMAC brute force (recomputing HS256 over a small wordlist and comparing to a real token's signature) rather than asserting the vulnerability exists; confirms alg:none is correctly rejected first. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ssrf-pdf-report-resource-fetch": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative case (a normal external image) driven by a raw HTTP client against the simulated network. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-bulk-export-no-scope": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative case (the correctly-scoped directory API) driven by a raw HTTP client. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "mc-http-parameter-pollution": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/modern-bugbounty-batch10.test.ts",
+    "note": "Exploit + negative cases (a single value, a direct request for another user's id) driven by a raw HTTP client. Mutation-checked: making the lookup agree with the ownership check makes this test fail. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-approval-step-skip": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-clone-cross-tenant": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-downgrade-stale-claim": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-download-signing-oracle": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-email-change-body-identity": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-invite-role-escalation": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-job-runas-confused-deputy": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-method-override-admin": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-ownership-toctou-share": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-ownership-transfer-collaborator": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-role-inheritance-upward": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ac-share-accept-unbound": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "gql-mutation-guard-gap": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/advanced-access-control.test.ts",
+    "note": "Exploit, near-miss and authorized/legitimate cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the test fails. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-coupon-per-account-reuse": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-coupon-stacking-slots": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-currency-rounding-arbitrage": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-giftcard-self-transfer": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-payment-return-status-tamper": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-race-checkout-cart-mutation": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-referral-reward-unpaid": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-refund-idempotency-race": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-refund-ignores-discount": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-refund-to-wallet-bola": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-subscription-cycle-entitlement": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-topup-confirmation-replay": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "sl-transfer-partial-completion": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/business-logic-batch.test.ts",
+    "note": "Ordinary-use, near-miss and exploit cases driven by a raw HTTP client; the verifier was also sabotaged on purpose (always-solve) to confirm the matching test fails. Race labs require genuinely overlapping requests and assert on the resulting state. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-debug-endpoint-signing-secret": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-export-leaks-reset-tokens": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-frontend-secret-key": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-sourcemap-internal-token": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-storage-bucket-listing": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "id-verbose-error-service-token": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-batch-endpoint-authz-skip": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-content-type-validation-bypass": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-key-scope-by-verb": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "api-webhook-signature-optional": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "gql-alias-cost-abuse": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "gql-batching-rate-limit-bypass": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  },
+  "ws-message-level-authz": {
+    "testsPassing": true,
+    "verifiedBuiltIn": false,
+    "verifiedExternalClient": true,
+    "verifiedViaProxy": true,
+    "documented": true,
+    "testFile": "tests/integration/info-disclosure-api-batch.test.ts",
+    "note": "Discovery alone (reading a source map, a debug endpoint, a verbose error, an export, a storage listing) never solves these — the verifier only fires once the leaked secret or token is actually used on a protected endpoint. Verifiers also sabotaged on purpose (always-solve) to confirm the matching test fails; two needed a genuine near-miss case added before the sabotage caught them. Generic contract: tests/integration/lab-contract.test.ts."
+  }
+}
