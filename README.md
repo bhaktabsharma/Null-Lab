@@ -60,7 +60,7 @@ Kali), install Docker Engine normally.
 
 ```bash
 git clone <repository-url>
-cd nulllab
+cd Null-Lab
 cp .env.example .env
 docker compose up --build
 ```
