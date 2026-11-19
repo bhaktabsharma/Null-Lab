@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright's Chromium (for XSS-lab verification + e2e tests)
+        run: npx playwright install --with-deps chromium
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Type-check lab targets
+        run: npx tsc --noEmit -p labs/tsconfig.json
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Unit tests
+        run: npm run test:unit
+
+      - name: Integration tests
+        run: npm run test:integration
+
+      - name: E2E tests
+        run: npm run test:e2e
+
+      - name: Integration tests through the local proxy harness (also checks lab-verification-status.json)
+        run: npm run test:proxy
+
+      - name: Regenerate coverage matrix (fails the build if it's out of date)
+        run: |
+          npm run coverage:matrix
+          git diff --exit-code docs/coverage-matrix.md || \
+            (echo "::error::docs/coverage-matrix.md is out of date — run 'npm run coverage:matrix' and commit it." && exit 1)
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
