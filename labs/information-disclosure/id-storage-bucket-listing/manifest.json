@@ -1,0 +1,43 @@
+{
+  "id": "id-storage-bucket-listing",
+  "version": "1.0.0",
+  "title": "Snaplift — Shared Photo Albums",
+  "objective": "Photos are served from unguessable, private links. Read a photo that was never shared with you and that you were never given a link to.",
+  "family": "information-disclosure",
+  "subcategory": "storage-acl-mistake",
+  "difficulty": "medium",
+  "tags": [
+    "storage",
+    "enumeration",
+    "access-control",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-storage-bucket-listing/server.ts"
+  },
+  "verifier": {
+    "condition": "A photo belonging to a different user is fetched using a key obtained from the storage listing rather than from the app."
+  },
+  "weakness": "Each photo's storage key is unguessable and the app never links to another user's photos, but the storage backend's list operation was left open to anyone, letting every key in the bucket be enumerated independently of any individual photo's own protection.",
+  "vulnerableEndpoint": "GET /storage",
+  "seededData": "Two users, each with their own photos in a shared storage bucket. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has her own album with two photos."
+    }
+  ],
+  "hints": [
+    "The link to each of your photos is a long, random-looking key. On its own, is that key secret, or just hard to guess?",
+    "Storage backends sometimes offer a way to list everything they hold, separately from fetching one specific thing by its key.",
+    "Ask the storage layer itself for a listing, then fetch one of the keys it returns that is not one of your own."
+  ],
+  "burpNotes": "Try the storage path with nothing after it — a bare listing request, not a specific key.",
+  "spoilers": [
+    "get /storage"
+  ]
+}

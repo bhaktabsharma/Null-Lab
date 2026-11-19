@@ -1,0 +1,43 @@
+{
+  "id": "id-verbose-error-service-token",
+  "version": "1.0.0",
+  "title": "Dispatchly — Delivery Lookup",
+  "objective": "Tracking lookups go through an internal routing service you have no direct access to. Call that internal service yourself.",
+  "family": "information-disclosure",
+  "subcategory": "verbose-error-disclosure",
+  "difficulty": "medium",
+  "tags": [
+    "error-handling",
+    "secrets",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-verbose-error-service-token/server.ts"
+  },
+  "verifier": {
+    "condition": "The internal routing service is called directly using a token that leaked through an error message."
+  },
+  "weakness": "When the internal routing client fails to build a request, its error message includes the full request it was about to send, authorization header included, and that raw message is returned to the caller to \"help debugging\".",
+  "vulnerableEndpoint": "GET /api/internal/routing/lookup",
+  "seededData": "A tracking-number lookup form. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Can track deliveries with valid tracking numbers."
+    }
+  ],
+  "hints": [
+    "Valid tracking numbers follow a strict format. See what the app tells you when you give it something that does not fit.",
+    "An error message meant to help debugging sometimes says more than it should about what the server was about to do.",
+    "Submit a badly formed tracking number and read the error in full — then use what it reveals directly."
+  ],
+  "burpNotes": "Send a deliberately malformed value and inspect the full response body, not just the status code.",
+  "spoilers": [
+    "authorization: bearer",
+    "routingclient"
+  ]
+}
