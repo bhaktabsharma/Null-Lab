@@ -1,0 +1,37 @@
+{
+  "id": "auth-no-rate-limit-login",
+  "version": "1.0.0",
+  "title": "KioskPanel — No One's Counting",
+  "objective": "KioskPanel's admin PIN is short, and nothing stops you from trying every possibility. Find it.",
+  "family": "auth-session",
+  "subcategory": "credential-stuffing-no-lockout",
+  "difficulty": "easy",
+  "tags": [
+    "rate-limiting",
+    "lockout",
+    "brute-force",
+    "weak-credential"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-no-rate-limit-login/server.ts"
+  },
+  "verifier": {
+    "condition": "The correct admin PIN is submitted after more failed attempts than any reasonable lockout policy would have allowed."
+  },
+  "weakness": "The login endpoint places no limit at all on failed attempts — no lockout, no backoff, no CAPTCHA — so a short credential can simply be tried exhaustively.",
+  "vulnerableEndpoint": "POST /unlock (no attempt limiting of any kind)",
+  "seededData": "A 3-digit admin PIN (000-999), different each instance. No lockout state exists anywhere in the application.",
+  "credentials": [],
+  "hints": [
+    "Try a few wrong PINs in a row. Does anything change — a delay, an error, a lockout message?",
+    "A 3-digit PIN has exactly 1000 possibilities. That's a small enough number to simply try all of them.",
+    "Script the attempts rather than typing them by hand."
+  ],
+  "spoilers": [
+    "000-999",
+    "no lockout"
+  ],
+  "burpNotes": "Use Intruder with a numeric payload from 000 to 999 (zero-padded) against the pin parameter, or script it with curl/Python. A real client is expected here — no shortcuts."
+}

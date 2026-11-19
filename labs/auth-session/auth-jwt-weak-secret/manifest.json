@@ -1,0 +1,44 @@
+{
+  "id": "auth-jwt-weak-secret",
+  "version": "1.0.0",
+  "title": "ApiGateway — A Secret Worth Guessing",
+  "objective": "Tokens here are properly signed, with a real signature check — unlike the other ApiGateway. The signing secret just isn't a very good one. Forge an admin token by finding it.",
+  "family": "auth-session",
+  "subcategory": "jwt-validation",
+  "difficulty": "hard",
+  "tags": [
+    "jwt",
+    "weak-secret",
+    "brute-force",
+    "hmac"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-jwt-weak-secret/server.ts"
+  },
+  "verifier": {
+    "condition": "A request to the admin API succeeds using a JWT the caller forged and signed themselves, with a role claim the server never issued, proving the real signing secret was recovered rather than guessed as a token."
+  },
+  "weakness": "Tokens are signed correctly with HS256, but the signing secret is a short, common word rather than a long random value, so it can be recovered by trying candidate secrets against a token's own signature offline.",
+  "vulnerableEndpoint": "GET /api/admin/report (Authorization: Bearer <jwt>; signature genuinely verified, but the secret is weak)",
+  "seededData": "User alice (role user) with a correctly-issued, properly HS256-signed JWT obtainable via login. The signing secret is one short, common word, different each instance, drawn from a small fixed wordlist.",
+  "credentials": [
+    {
+      "label": "API user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "POST /api/login returns a real, correctly-signed token."
+    }
+  ],
+  "hints": [
+    "This token's signature is real — the alg:none trick from the other lab in this family won't work here. Confirm that for yourself.",
+    "An HMAC signature can be recomputed completely offline if you know the secret. You don't need the server's help to test a guess.",
+    "The secret is a single short, ordinary word, not a random string — the kind of thing that ends up in a small wordlist."
+  ],
+  "spoilers": [
+    "dragon",
+    "sunshine"
+  ],
+  "burpNotes": "Get a real token from /api/login, then take its header and payload and recompute the HS256 signature locally for each candidate secret in a short wordlist until one matches the token's actual signature — then build your own forged token with that secret."
+}

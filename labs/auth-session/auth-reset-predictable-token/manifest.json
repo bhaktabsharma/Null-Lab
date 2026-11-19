@@ -1,0 +1,45 @@
+{
+  "id": "auth-reset-predictable-token",
+  "version": "1.0.0",
+  "title": "LedgerBase — Reset Ticket #",
+  "objective": "Request a password reset for your own account, then take over the administrator's account instead — without ever seeing their reset link.",
+  "family": "auth-session",
+  "subcategory": "password-reset-flaws",
+  "difficulty": "medium",
+  "tags": [
+    "password-reset",
+    "predictable-token",
+    "idor",
+    "account-takeover"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-reset-predictable-token/server.ts"
+  },
+  "verifier": {
+    "condition": "A password reset completes for the 'admin' account using a reset token the attacker was never issued."
+  },
+  "weakness": "Password reset tokens are issued as short, sequential numbers instead of unpredictable random values, so a token for one account lets you infer a nearby token for another.",
+  "vulnerableEndpoint": "POST /reset-password/:token (tokens are sequential, issued in request order)",
+  "seededData": "Users alice and admin. A reset request for admin was made shortly before the instance started, so an in-range token already exists. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Request your own reset first to see the token format."
+    }
+  ],
+  "hints": [
+    "Request a reset for your own account and look closely at the token in the link you get back. Does it look random?",
+    "If tokens are issued in order, what would the token right before or after yours belong to?",
+    "You don't need admin's email to use their reset link — only their token."
+  ],
+  "spoilers": [
+    "sequential",
+    "token - 1",
+    "nextToken"
+  ],
+  "burpNotes": "Request a reset for yourself and note the token's format and length. Then try nearby values directly against /reset-password/:token in Repeater."
+}

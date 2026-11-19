@@ -1,0 +1,43 @@
+{
+  "id": "auth-remember-me-predictable",
+  "version": "1.0.0",
+  "title": "PantryPal — Remember This Device",
+  "objective": "'Remember me' lets you skip the password on your own device. Use it to sign in as someone who never gave you their password.",
+  "family": "auth-session",
+  "subcategory": "remember-me-token",
+  "difficulty": "medium",
+  "tags": [
+    "remember-me",
+    "persistent-login",
+    "predictable-token"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-remember-me-predictable/server.ts"
+  },
+  "verifier": {
+    "condition": "A remember-me cookie that was never issued by a real login for that account grants an authenticated session for the 'admin' account."
+  },
+  "weakness": "The persistent 'remember me' token is derived deterministically from public information about the account (the username) rather than a stored, unguessable random secret, so it can be computed for any known username.",
+  "vulnerableEndpoint": "GET / (Cookie: remember=<token>, checked without comparing to a per-user stored secret)",
+  "seededData": "User alice with a known password, and an admin account whose password is unknown. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Check 'remember me' when you sign in and inspect the cookie you receive."
+    }
+  ],
+  "hints": [
+    "Sign in with 'remember me' checked and look closely at the token's structure — is it long and opaque, or could it be computed?",
+    "If a value is built from something public, like a username, it isn't really a secret at all — it's a formula.",
+    "Try working out what the same formula would produce for a username you don't have a password for."
+  ],
+  "spoilers": [
+    "md5(username",
+    "remember="
+  ],
+  "burpNotes": "Capture your own remember-me cookie, work out how it's derived, then compute what it would be for the 'admin' username and send it directly as a Cookie header."
+}

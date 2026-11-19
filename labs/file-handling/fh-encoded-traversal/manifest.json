@@ -1,0 +1,36 @@
+{
+  "id": "fh-encoded-traversal",
+  "version": "1.0.0",
+  "title": "DocuDrop — Blocked, But Only Once",
+  "objective": "A straightforward '../' is blocked this time. Use an encoded form of the same sequence to escape the receipts directory anyway.",
+  "family": "file-handling",
+  "subcategory": "path-traversal",
+  "difficulty": "medium",
+  "tags": [
+    "path-traversal",
+    "url-encoding",
+    "double-encoding",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-encoded-traversal/server.ts"
+  },
+  "verifier": {
+    "condition": "The download endpoint returns content outside the receipts directory from a filename whose literal text never contained the string '../'."
+  },
+  "weakness": "The filter rejects the literal string '../' before the framework's own URL-decoding has fully run, so an encoded or double-encoded traversal sequence reaches the file lookup unfiltered.",
+  "vulnerableEndpoint": "GET /download?file= (filtered for the literal substring '../' only)",
+  "seededData": "The same simulated filesystem as the basic traversal lab, in a separate instance.",
+  "credentials": [],
+  "hints": [
+    "A literal '../' is now rejected outright — confirm that first.",
+    "A URL can represent the same character more than one way. What's the percent-encoded form of a forward slash and a period?",
+    "If the filter runs before decoding finishes, try encoding the sequence more than once."
+  ],
+  "spoilers": [
+    "db-credentials.txt"
+  ],
+  "burpNotes": "Try %2e%2e%2f in place of ../ in Repeater. If that alone doesn't work, try double-encoding each character (%252e%252e%252f) to survive an extra decode pass."
+}

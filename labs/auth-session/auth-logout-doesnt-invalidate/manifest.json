@@ -1,0 +1,43 @@
+{
+  "id": "auth-logout-doesnt-invalidate",
+  "version": "1.0.0",
+  "title": "NotaryFlow — Logged Out, Still In",
+  "objective": "Sign in, capture your session cookie, log out — then use the captured cookie to access your account again, as if you were never logged out.",
+  "family": "auth-session",
+  "subcategory": "session-invalidation",
+  "difficulty": "easy",
+  "tags": [
+    "session-invalidation",
+    "logout",
+    "token-revocation"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-logout-doesnt-invalidate/server.ts"
+  },
+  "verifier": {
+    "condition": "A request using a session token issued by a login succeeds on a protected page after that session's logout request has completed."
+  },
+  "weakness": "Logout only clears the cookie in the browser's response; the server never revokes the session on its side, so the token itself keeps working if it's replayed.",
+  "vulnerableEndpoint": "GET /logout (clears the cookie client-side only; the token keeps working)",
+  "seededData": "User alice with a known password. In-memory session store.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Note your session cookie's exact value before logging out."
+    }
+  ],
+  "hints": [
+    "Capture your session cookie's value before you click log out — write it down somewhere.",
+    "After logging out, try sending a request to a protected page using that exact old cookie value, set manually.",
+    "Logging out usually clears a cookie in the browser. That doesn't tell you what the server did with the token on its own side."
+  ],
+  "spoilers": [
+    "session store",
+    "revoke"
+  ],
+  "burpNotes": "Log in, copy the Cookie header's value from any authenticated request, log out, then replay a request to the protected page in Repeater with that old cookie value set manually."
+}

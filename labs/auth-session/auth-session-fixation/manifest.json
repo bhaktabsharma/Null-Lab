@@ -1,0 +1,42 @@
+{
+  "id": "auth-session-fixation",
+  "version": "1.0.0",
+  "title": "HelpDeskPro — The Session That Was Already There",
+  "objective": "Get a help-desk agent to end up authenticated under a session identifier you chose beforehand.",
+  "family": "auth-session",
+  "subcategory": "session-fixation",
+  "difficulty": "medium",
+  "tags": [
+    "session-fixation",
+    "session-management",
+    "cookies"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-session-fixation/server.ts"
+  },
+  "verifier": {
+    "condition": "A session identifier chosen before login (via the sid query parameter) is still the active, authenticated session identifier after a real login completes."
+  },
+  "weakness": "Login does not issue a fresh session identifier; if a session cookie is already present when a user logs in, the application simply upgrades the EXISTING session to authenticated, so an attacker who plants a known identifier on the victim beforehand inherits their authenticated session.",
+  "vulnerableEndpoint": "GET /?sid=<attacker-chosen value> then POST /login (session id unchanged across the login boundary)",
+  "seededData": "Agent account alice with a known password. In-memory session store keyed by a plain session id.",
+  "credentials": [
+    {
+      "label": "Agent account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in normally first and compare your session id before and after."
+    }
+  ],
+  "hints": [
+    "Note your session cookie's value before you sign in, then check it again right after. Did it change?",
+    "This app accepts a ?sid= link to set your session id directly. What happens if you visit such a link, then sign in?",
+    "You don't need to steal anyone's session — you can hand them one of your own choosing."
+  ],
+  "spoilers": [
+    "attackerChosen"
+  ],
+  "burpNotes": "Capture your session cookie before and after logging in via Repeater and compare the two raw values directly."
+}

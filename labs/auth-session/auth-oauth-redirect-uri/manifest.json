@@ -1,0 +1,37 @@
+{
+  "id": "auth-oauth-redirect-uri",
+  "version": "1.0.0",
+  "title": "ConnectHub — Sign in with ShopSphere",
+  "objective": "ConnectHub lets people sign in via a mock identity provider, ShopSphere. Get an authorization code meant for ConnectHub delivered to a URL you control instead.",
+  "family": "auth-session",
+  "subcategory": "oauth-oidc-errors",
+  "difficulty": "hard",
+  "tags": [
+    "oauth",
+    "redirect-uri",
+    "authorization-code",
+    "mock-idp"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-oauth-redirect-uri/server.ts"
+  },
+  "verifier": {
+    "condition": "The mock identity provider issues a real authorization code to a redirect_uri that is not ConnectHub's registered callback host."
+  },
+  "weakness": "The identity provider validates redirect_uri with a prefix/substring check against the registered callback instead of exact matching, so a crafted URL that merely starts with or contains the registered value is accepted.",
+  "vulnerableEndpoint": "GET /idp/authorize?redirect_uri=",
+  "seededData": "A mock identity provider (ShopSphere) in the same process, registered for ConnectHub's callback at a fixed path. An admin session the demo 'Sign in' link authorizes as. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Start the sign-in flow normally and read the authorize request's redirect_uri parameter — what does the registered callback actually look like?",
+    "The identity provider's check isn't wrong about rejecting a totally different host. Try values that technically start with, or contain, the registered URL.",
+    "An authorization code is only useful to whoever's server receives it. Where does the provider actually send it?"
+  ],
+  "spoilers": [
+    "startsWith",
+    ".connecthub.test.attacker"
+  ],
+  "burpNotes": "Start the flow via the Sign-in link, intercept the GET /idp/authorize request, and try variations of redirect_uri in Repeater, checking whether the provider's consent/redirect step still goes through."
+}

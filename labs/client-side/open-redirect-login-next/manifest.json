@@ -1,0 +1,44 @@
+{
+  "id": "open-redirect-login-next",
+  "version": "1.0.0",
+  "title": "GoShort — Back Where You Came From",
+  "objective": "After signing in, GoShort sends you back to whichever page you started on. Make it send a signed-in user's browser to a different website entirely.",
+  "family": "client-side",
+  "subcategory": "open-redirect",
+  "difficulty": "easy",
+  "tags": [
+    "open-redirect",
+    "redirect",
+    "login",
+    "validation-bypass"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/open-redirect-login-next/server.ts"
+  },
+  "verifier": {
+    "condition": "A successful login with a crafted 'next' value results in a redirect whose destination resolves to a different host than the application's own."
+  },
+  "weakness": "The post-login redirect target is validated with a check that a crafted value can satisfy without actually staying on the application's own site.",
+  "vulnerableEndpoint": "POST /login (next field becomes the redirect Location)",
+  "seededData": "User alice with a known password. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in normally first to see how the redirect behaves."
+    }
+  ],
+  "hints": [
+    "Sign in through a few different links around the site and watch what 'next' is set to each time. What does the app seem to be checking?",
+    "The check looks for a leading slash. Is a leading slash always enough to keep a URL on the same site?",
+    "Browsers treat a URL starting with // specially — try it directly in your address bar first, outside of this app, to see what it resolves to."
+  ],
+  "spoilers": [
+    "startsWith(\"/\")",
+    "//evil"
+  ],
+  "burpNotes": "Submit the login form in Repeater with different 'next' values and read the Location header of the 302 response directly — you don't need a browser to see where it would go."
+}

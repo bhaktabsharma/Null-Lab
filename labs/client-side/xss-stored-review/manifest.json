@@ -1,0 +1,47 @@
+{
+  "id": "xss-stored-review",
+  "version": "1.0.0",
+  "title": "ShopMart — Stored XSS in Product Reviews",
+  "objective": "Product reviews are public and rendered with no sanitization. A store admin periodically moderates new reviews — get your payload to run in their session.",
+  "family": "client-side",
+  "subcategory": "xss-stored",
+  "difficulty": "medium",
+  "tags": [
+    "xss",
+    "stored",
+    "shopmart"
+  ],
+  "estimatedMinutes": 25,
+  "prerequisites": [
+    "xss-reflected-search"
+  ],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/xss-stored-review/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/xss-stored-review",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A stored product review's payload executes as real JavaScript when a privileged (admin) moderation session later views the product page, and exfiltrates that session's page-specific token to /collect.",
+    "requiresBrowserBot": true,
+    "adminCookieName": "shopmart_review_admin"
+  },
+  "credentials": [],
+  "weakness": "Product review text is stored and later rendered unencoded to a moderator, so stored script runs in a privileged session.",
+  "vulnerableEndpoint": "POST /products/:id/reviews (stored) then GET /products/:id (rendered)",
+  "seededData": "Two products with seeded reviews; one admin moderator session.",
+  "spoilers": [
+    "<script>",
+    "onerror="
+  ],
+  "solutionHint": "Leave a review on the Mechanical Keyboard product page. Whatever you type in the review text appears on the page exactly as typed — including for whoever moderates it later."
+}

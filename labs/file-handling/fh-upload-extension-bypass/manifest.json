@@ -1,0 +1,36 @@
+{
+  "id": "fh-upload-extension-bypass",
+  "version": "1.0.0",
+  "title": "AvatarHub — Images Only",
+  "objective": "The avatar uploader only accepts image files — checked by extension. Get an executable-looking script file accepted and stored anyway.",
+  "family": "file-handling",
+  "subcategory": "upload-validation-bypass",
+  "difficulty": "medium",
+  "tags": [
+    "file-upload",
+    "extension-bypass",
+    "validation",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-upload-extension-bypass/server.ts"
+  },
+  "verifier": {
+    "condition": "A file whose effective extension, as the storage step actually uses it, is not one of the allowed image extensions is accepted and stored."
+  },
+  "weakness": "The extension check looks only at whether an allowed image extension appears anywhere in the filename, not at what the file's real, final extension is, so a crafted double extension satisfies the check while actually storing a different file type.",
+  "vulnerableEndpoint": "POST /avatar/upload (filename field; extension matched with .includes() rather than checking the true suffix)",
+  "seededData": "A simulated uploads directory (never real disk). No pre-existing files.",
+  "credentials": [],
+  "hints": [
+    "Upload a real .png and a real .txt first and see how each is handled.",
+    "The filter is checking for the presence of an allowed extension, not necessarily what the file actually ends with.",
+    "A filename can contain more than one dot."
+  ],
+  "spoilers": [
+    ".includes("
+  ],
+  "burpNotes": "Upload with a filename like 'shell.php.png' or 'shell.png.php' in Repeater and see which combinations the server accepts, and what it actually stores the file as."
+}

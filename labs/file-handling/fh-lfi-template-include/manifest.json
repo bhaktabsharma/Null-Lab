@@ -1,0 +1,36 @@
+{
+  "id": "fh-lfi-template-include",
+  "version": "1.0.0",
+  "title": "HelpCenter — Pick a Page",
+  "objective": "The help center loads article content by name from a templates directory. Make it load a file that was never meant to be an article.",
+  "family": "file-handling",
+  "subcategory": "lfi",
+  "difficulty": "medium",
+  "tags": [
+    "lfi",
+    "local-file-inclusion",
+    "path-traversal",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-lfi-template-include/server.ts"
+  },
+  "verifier": {
+    "condition": "The rendered help page includes the content of a file outside the templates directory, located via the page parameter."
+  },
+  "weakness": "A page name is used to build a template path with no check that the resolved path stays inside the templates directory, so a crafted name can include and render an unrelated file's content inline.",
+  "vulnerableEndpoint": "GET /help?page= (joined onto the templates directory, rendered inline)",
+  "seededData": "A simulated filesystem with several help templates and a sibling 'config' directory holding a synthetic application config file.",
+  "credentials": [],
+  "hints": [
+    "Browse a couple of normal help pages and note exactly how 'page' maps to what's shown.",
+    "This behaves like a filename being looked up in a directory, not like a fixed set of known article IDs. What else lives near that directory?",
+    "The templates directory isn't the only thing on this simulated filesystem."
+  ],
+  "spoilers": [
+    "../config"
+  ],
+  "burpNotes": "Enumerate the page parameter with traversal sequences pointing at sibling directories; the response renders whatever content is found directly inline."
+}

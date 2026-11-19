@@ -1,0 +1,36 @@
+{
+  "id": "fh-path-traversal-download",
+  "version": "1.0.0",
+  "title": "DocuDrop — Download Your Receipt",
+  "objective": "Download one of your own receipts normally, then use the same download feature to read a file that isn't a receipt at all.",
+  "family": "file-handling",
+  "subcategory": "path-traversal",
+  "difficulty": "easy",
+  "tags": [
+    "path-traversal",
+    "file-download",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-path-traversal-download/server.ts"
+  },
+  "verifier": {
+    "condition": "The download endpoint returns the content of a file outside the receipts directory, via a filename containing a traversal sequence."
+  },
+  "weakness": "The requested filename is concatenated directly onto the receipts directory with no normalization or containment check, so '../' sequences escape the intended directory.",
+  "vulnerableEndpoint": "GET /download?file= (string-concatenated onto the receipts directory)",
+  "seededData": "A simulated filesystem (never real disk — see lab-sdk's MiniVfs) with a receipts directory and a sibling 'internal' directory holding a synthetic secrets file.",
+  "credentials": [],
+  "hints": [
+    "Download your own receipt first and look at exactly how the filename appears in the request.",
+    "The receipts directory has at least one sibling directory. Directory structures are usually navigable from the inside.",
+    "A filename doesn't have to refer to a file IN the current directory."
+  ],
+  "spoilers": [
+    "../",
+    "internal/"
+  ],
+  "burpNotes": "Send the download request to Repeater and replace the file parameter with a traversal sequence leading to a sibling directory."
+}

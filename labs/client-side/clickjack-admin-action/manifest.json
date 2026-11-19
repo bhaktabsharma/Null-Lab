@@ -1,0 +1,40 @@
+{
+  "id": "clickjack-admin-action",
+  "version": "1.0.0",
+  "title": "QuickVote — A Very Generous Giveaway",
+  "objective": "The admin's 'Reset all votes' button is one click away on its own page, and nobody but the admin should ever press it. Get it pressed anyway — without ever telling the admin what they're really clicking.",
+  "family": "client-side",
+  "subcategory": "clickjacking",
+  "difficulty": "medium",
+  "tags": [
+    "clickjacking",
+    "ui-redressing",
+    "iframe",
+    "x-frame-options",
+    "admin-bot"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/clickjack-admin-action/server.ts"
+  },
+  "verifier": {
+    "requiresBrowserBot": true,
+    "adminCookieName": "qv_admin",
+    "condition": "A real click at the on-screen position of a decoy element actually lands on the admin's reset-votes button, because the sensitive page can be framed with no protection."
+  },
+  "weakness": "The sensitive action's page sets no X-Frame-Options or frame-ancestors policy, so it can be framed and visually hidden beneath an unrelated, enticing element, redirecting a victim's real click onto it.",
+  "vulnerableEndpoint": "GET /admin/reset (no framing protection) via an invisible iframe layered over a decoy button",
+  "seededData": "An admin session minted by the lab's own admin-bot endpoint; a single in-memory 'votes reset' flag.",
+  "credentials": [],
+  "hints": [
+    "Load the admin page on its own first. Nothing about its own content is the weakness here — think about what's missing from its response headers.",
+    "An attacker doesn't need the admin to see a real button. They need the admin to see something else entirely, positioned exactly where the real button is.",
+    "The decoy page frames the real page. Use 'Simulate admin visit' on the decoy page's own path, not the real action's path — the simulated admin needs to actually click the bait."
+  ],
+  "spoilers": [
+    "attacker/demo",
+    "data-ck-target"
+  ],
+  "burpNotes": "This one needs an actual rendered click, not just an HTTP request, so Burp alone can't demonstrate it — use 'Simulate admin visit' with the decoy page's path. You can still use Burp to confirm the real action's response carries no X-Frame-Options or Content-Security-Policy frame-ancestors header."
+}

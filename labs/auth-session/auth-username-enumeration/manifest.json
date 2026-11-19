@@ -1,0 +1,36 @@
+{
+  "id": "auth-username-enumeration",
+  "version": "1.0.0",
+  "title": "MemberGate — Two Kinds of Wrong",
+  "objective": "Sign-in failures all look the same at a glance. Find out which of three candidate usernames is a real account, without ever guessing a correct password.",
+  "family": "auth-session",
+  "subcategory": "account-enumeration",
+  "difficulty": "easy",
+  "tags": [
+    "account-enumeration",
+    "authentication",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-username-enumeration/server.ts"
+  },
+  "verifier": {
+    "condition": "A login attempt for the known-nonexistent decoy username is correctly distinguished from the real account using only the login endpoint's response, and that distinguishing request is made for the real account."
+  },
+  "weakness": "The login endpoint returns a different error for 'no such user' than for 'wrong password', letting an attacker enumerate valid usernames without ever knowing a password.",
+  "vulnerableEndpoint": "POST /login (error message differs by failure reason)",
+  "seededData": "One real account, 'priya', with an unguessable password. Two decoy usernames you may also try. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Try signing in with an obviously made-up username and a random password. Read the error carefully.",
+    "Now try a few candidate usernames with a random password each. Does every response look identical?",
+    "You aren't trying to guess a password here — only to tell which username exists at all."
+  ],
+  "spoilers": [
+    "no such user",
+    "wrong password"
+  ],
+  "burpNotes": "Send login attempts for each candidate username with an arbitrary password in Repeater and diff the response bodies and status codes."
+}

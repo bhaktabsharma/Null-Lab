@@ -1,0 +1,41 @@
+{
+  "id": "xss-dom-hash-sink",
+  "version": "1.0.0",
+  "title": "QuickFilter — The URL Never Leaves the Browser",
+  "objective": "The dashboard highlights a 'quick filter' straight from the page's own URL — no page reload, no server round trip. Make the admin's browser run your script when they open a link you send them.",
+  "family": "client-side",
+  "subcategory": "xss-dom",
+  "difficulty": "medium",
+  "tags": [
+    "xss",
+    "dom-based",
+    "client-side",
+    "fragment",
+    "admin-bot"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/xss-dom-hash-sink/server.ts"
+  },
+  "verifier": {
+    "requiresBrowserBot": true,
+    "adminCookieName": "qf_admin",
+    "condition": "The payload exfiltrates the admin-only data-token rendered on /dashboard, proving it executed inside an authenticated admin session reached via a URL fragment the server never sees."
+  },
+  "weakness": "Client-side JavaScript reads the URL fragment and writes it into the page with innerHTML, with no server round trip and no sanitization, so a crafted fragment runs as script in the viewer's browser.",
+  "vulnerableEndpoint": "GET /dashboard#filter=<payload> (read by client-side JS, never sent to the server)",
+  "seededData": "One admin session (minted by the lab's own admin-bot endpoint) with a per-instance token rendered only for admins. In-memory.",
+  "credentials": [],
+  "hints": [
+    "This page never seems to send your filter text anywhere, yet it visibly reacts to it. Where could that logic live?",
+    "The browser never sends a URL's fragment (everything after #) to the server at all. If the page still responds to it, something in the page itself must be reading it.",
+    "Look at how the active filter gets drawn onto the page. Is it built as text, or inserted as markup?"
+  ],
+  "spoilers": [
+    "location.hash",
+    "innerHTML",
+    "data-token"
+  ],
+  "burpNotes": "Burp never sees the fragment either — it isn't sent in any request. Use 'Simulate admin visit' with a path like /dashboard#filter=<payload> to test this one; it fires client-side the moment the page loads for the admin bot."
+}

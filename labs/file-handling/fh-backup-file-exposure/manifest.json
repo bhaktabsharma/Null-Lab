@@ -1,0 +1,36 @@
+{
+  "id": "fh-backup-file-exposure",
+  "version": "1.0.0",
+  "title": "SiteForge — Someone Forgot to Clean Up",
+  "objective": "The site's source is only ever served as rendered pages. Find a leftover backup file that serves the raw source instead.",
+  "family": "file-handling",
+  "subcategory": "backup-file-exposure",
+  "difficulty": "easy",
+  "tags": [
+    "backup-file",
+    "information-disclosure",
+    "forced-browsing",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-backup-file-exposure/server.ts"
+  },
+  "verifier": {
+    "condition": "A request for a backup-style filename derived from a real application file returns that file's raw, unrendered source."
+  },
+  "weakness": "A static file server exposes an entire directory verbatim, including editor/deployment backup files left alongside the real source, which are served as plain text instead of being excluded or executed.",
+  "vulnerableEndpoint": "GET /static/<name> (serves anything present in the directory, including backup-style files)",
+  "seededData": "A simulated static directory containing the rendered site plus one leftover backup file a deploy script forgot to clean up.",
+  "credentials": [],
+  "hints": [
+    "Browse the site normally first. Everything you see is rendered output, never raw source.",
+    "Editors and deploy scripts often leave a copy behind with a predictable suffix appended to the original filename — a tilde, '.bak', '.orig', '.swp'.",
+    "Guess at a backup-style name for a page you already know exists, like the homepage's source file."
+  ],
+  "spoilers": [
+    "index.php.bak"
+  ],
+  "burpNotes": "Try common backup suffixes appended to known filenames directly under /static/ — no special tooling needed, just request candidate paths."
+}

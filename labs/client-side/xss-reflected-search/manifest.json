@@ -1,0 +1,45 @@
+{
+  "id": "xss-reflected-search",
+  "version": "1.0.0",
+  "title": "SupportDesk — Reflected Search XSS",
+  "objective": "The help-centre search page echoes your search term straight back into the page. Get a support admin to click your crafted link and prove real script execution in their session.",
+  "family": "client-side",
+  "subcategory": "xss-reflected",
+  "difficulty": "easy",
+  "tags": [
+    "xss",
+    "reflected",
+    "supportdesk"
+  ],
+  "estimatedMinutes": 20,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/xss-reflected-search/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/xss-reflected-search",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A payload reflected by GET /search?q=... executes as real JavaScript in a privileged (admin) browsing session and exfiltrates that session's page-specific token to /collect.",
+    "requiresBrowserBot": true,
+    "adminCookieName": "supportdesk_xss_admin"
+  },
+  "credentials": [],
+  "weakness": "A search term is reflected into the HTML response without encoding, so a crafted link runs script in a privileged session.",
+  "vulnerableEndpoint": "GET /search?q=",
+  "seededData": "One admin account visited by the NULLLAB admin bot; no stored data.",
+  "spoilers": [
+    "<script>",
+    "onerror="
+  ],
+  "solutionHint": "Whatever you search for is dropped straight into the page's HTML. Once you've got script execution, look for an element the page only renders for an admin session, and send what it holds to /collect?token=..."
+}

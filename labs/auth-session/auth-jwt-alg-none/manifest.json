@@ -1,0 +1,43 @@
+{
+  "id": "auth-jwt-alg-none",
+  "version": "1.0.0",
+  "title": "ApiGateway — Trust the Header",
+  "objective": "The API trusts a JWT's claims for authorization. You have a valid token for a normal account. Get the API to treat you as an administrator instead.",
+  "family": "auth-session",
+  "subcategory": "jwt-validation",
+  "difficulty": "hard",
+  "tags": [
+    "jwt",
+    "alg-none",
+    "signature-bypass",
+    "authentication"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-jwt-alg-none/server.ts"
+  },
+  "verifier": {
+    "condition": "A request to the admin API succeeds using a JWT whose header declares alg \"none\" and which carries no valid signature for the application's actual secret."
+  },
+  "weakness": "The token verifier branches on the algorithm named in the token's own header and skips signature checking entirely when that header says \"none\", so a caller can simply declare their own token unsigned.",
+  "vulnerableEndpoint": "GET /api/admin/report (Authorization: Bearer <jwt>)",
+  "seededData": "User alice (role user) with a correctly-issued, properly-signed JWT obtainable via login. The signing secret is per-instance and never sent to the client.",
+  "credentials": [
+    {
+      "label": "API user",
+      "username": "alice",
+      "password": "practice123",
+      "note": "POST /api/login returns a signed JWT for this account."
+    }
+  ],
+  "hints": [
+    "A JSON Web Token has three dot-separated parts. The first one isn't secret — try decoding it (base64url) and see what it says about how the token is protected.",
+    "What happens if you build your OWN token by hand, changing the claims and the declared algorithm, instead of trying to forge a valid signature for the real one?",
+    "Some JWT libraries historically trusted the algorithm the token itself claimed to use, including a setting that means 'no signature at all'."
+  ],
+  "spoilers": [
+    "no signature at all"
+  ],
+  "burpNotes": "Get a real token from /api/login, then build your own in Repeater: base64url-encode a header of {\"alg\":\"none\",\"typ\":\"JWT\"} and a payload with role set to admin, join them with a dot, and leave the signature part empty (a trailing dot with nothing after it)."
+}

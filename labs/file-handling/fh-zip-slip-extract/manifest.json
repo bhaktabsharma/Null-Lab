@@ -1,0 +1,37 @@
+{
+  "id": "fh-zip-slip-extract",
+  "version": "1.0.0",
+  "title": "ThemeHub — Install a Theme",
+  "objective": "Theme packages are archives extracted into a sandboxed themes folder. Get an archive to write a file outside that folder.",
+  "family": "file-handling",
+  "subcategory": "zip-slip",
+  "difficulty": "hard",
+  "tags": [
+    "zip-slip",
+    "archive-extraction",
+    "path-traversal",
+    "simulated-filesystem"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/file-handling/fh-zip-slip-extract/server.ts"
+  },
+  "verifier": {
+    "condition": "After installing a theme package, a file exists outside the themes directory that was not there before, written there by the extraction step."
+  },
+  "weakness": "Each archive entry's path is joined directly onto the extraction directory with no check that the result stays inside it, so an entry path containing '../' sequences writes outside the intended destination during extraction.",
+  "vulnerableEndpoint": "POST /themes/install (archive entry paths joined onto the themes directory with no containment check)",
+  "seededData": "A simulated themes directory (never real disk) and a sibling 'app' directory containing a synthetic startup script, present before any install.",
+  "credentials": [],
+  "hints": [
+    "Install a normal, well-behaved theme package first (a plain, flat set of files) and see where its files land.",
+    "An archive's own entries, not just its filename, is where their final path comes from. What if an entry's own path included '../'?",
+    "You're not limited to files that look like theme files — you're choosing where each entry in the package goes."
+  ],
+  "spoilers": [
+    "../app/",
+    "entry.path"
+  ],
+  "burpNotes": "This one is driven through the archive's entry list in the install request body, not a path parameter — craft an entry whose path climbs out of the themes directory and overwrites something in the sibling app directory."
+}

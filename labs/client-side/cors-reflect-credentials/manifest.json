@@ -1,0 +1,44 @@
+{
+  "id": "cors-reflect-credentials",
+  "version": "1.0.0",
+  "title": "BudgetBoard — Any Origin Welcome",
+  "objective": "The profile API is meant for BudgetBoard's own front end only. Get a different website's CORS preflight to be allowed through with your session's cookies attached.",
+  "family": "client-side",
+  "subcategory": "cors-misconfiguration",
+  "difficulty": "medium",
+  "tags": [
+    "cors",
+    "credentials",
+    "misconfiguration",
+    "api"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/client-side/cors-reflect-credentials/server.ts"
+  },
+  "verifier": {
+    "condition": "An authenticated request carrying a foreign Origin receives that exact origin reflected in Access-Control-Allow-Origin together with Access-Control-Allow-Credentials: true on the sensitive profile endpoint."
+  },
+  "weakness": "The server reflects any request's Origin header back as Access-Control-Allow-Origin and sets Access-Control-Allow-Credentials: true, letting any website read a signed-in user's data with their cookies attached.",
+  "vulnerableEndpoint": "GET /api/profile (CORS headers computed from the request's own Origin)",
+  "seededData": "User alice with seeded balance data. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in first, then send requests with your session cookie and a different Origin header."
+    }
+  ],
+  "hints": [
+    "Compare the response headers for /api/public-stats with /api/profile. What's different about how each decides who it will talk to?",
+    "Try sending a request with an Origin header for a site this application has nothing to do with.",
+    "Two response headers together are what actually make cross-site reading possible with your cookies attached. Check for both."
+  ],
+  "spoilers": [
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Credentials"
+  ],
+  "burpNotes": "Sign in to get a session cookie, then in Repeater add an Origin header for an arbitrary site to the /api/profile request and inspect the response headers. No browser is needed for this one — the misconfiguration is in what the server sends back, not in what a browser enforces."
+}

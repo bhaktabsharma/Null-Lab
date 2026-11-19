@@ -1,0 +1,44 @@
+{
+  "id": "auth-mfa-step-skip",
+  "version": "1.0.0",
+  "title": "VaultKey — Almost Two Factors",
+  "objective": "Sign in with the correct password but skip the one-time code step. Reach the account page anyway.",
+  "family": "auth-session",
+  "subcategory": "mfa-bypass",
+  "difficulty": "medium",
+  "tags": [
+    "mfa",
+    "2fa",
+    "authentication",
+    "step-up-auth"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/auth-session/auth-mfa-step-skip/server.ts"
+  },
+  "verifier": {
+    "condition": "The protected account page is served to a session whose server-side record shows the one-time code step was never completed."
+  },
+  "weakness": "The protected page checks only whether a session exists, not whether that session's multi-step login actually reached the completed state, so a session minted after the password step alone is already enough.",
+  "vulnerableEndpoint": "GET /account (checks session presence, not its mfaVerified flag)",
+  "seededData": "User alice with a known password and a 6-digit one-time code you are never shown (correct verification is possible but not required for the exploit). In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "After signing in you'll be asked for a 6-digit code you don't have."
+    }
+  ],
+  "hints": [
+    "Watch what happens the moment you submit the correct password, before you ever touch the code field. Are you already holding something?",
+    "The one-time-code page and the account page are two different requests. What does the server actually check on each?",
+    "Try going straight to the page you'd land on after a full, successful sign-in."
+  ],
+  "spoilers": [
+    "mfaVerified",
+    "/account directly"
+  ],
+  "burpNotes": "Submit the password step in Repeater and inspect the Set-Cookie header, then send that cookie straight to /account without ever visiting /verify-code."
+}
