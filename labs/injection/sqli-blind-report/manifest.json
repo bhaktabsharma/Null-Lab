@@ -1,0 +1,48 @@
+{
+  "id": "sqli-blind-report",
+  "version": "1.0.0",
+  "title": "SearchPortal — Blind Boolean Report Filter",
+  "objective": "The sales report's price filter is injectable, but the page never shows query results or errors — only whether any matching rows were found. Use a blind boolean injection to reach data outside the products table.",
+  "family": "injection",
+  "subcategory": "sqli-boolean-blind",
+  "difficulty": "hard",
+  "tags": [
+    "sqli",
+    "blind",
+    "boolean-based",
+    "injection",
+    "searchportal"
+  ],
+  "estimatedMinutes": 30,
+  "prerequisites": [
+    "sqli-product-search"
+  ],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-blind-report/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/sqli-blind-report",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "The min_price filter is manipulated with a boolean subquery against the hidden vault table, and the report's true/false response genuinely reflects that subquery's real result.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [],
+  "weakness": "A numeric filter is concatenated into a SQL query, so boolean subqueries leak data one bit at a time through the report's true/false behaviour.",
+  "vulnerableEndpoint": "GET /reports?min_price=",
+  "seededData": "SQLite: products table plus a hidden vault table; per-instance file.",
+  "spoilers": [
+    "' OR",
+    "1=1"
+  ],
+  "solutionHint": "Setting min_price to an impossibly high number should always report \"no matches\". If you can make it report \"matches found\" anyway by OR-ing in a condition about another table, you've proven you can inject boolean logic — even though you never see any data directly."
+}

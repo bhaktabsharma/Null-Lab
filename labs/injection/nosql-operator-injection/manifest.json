@@ -1,0 +1,45 @@
+{
+  "id": "nosql-operator-injection",
+  "version": "1.0.0",
+  "title": "VaultCRM — Operators in the Password",
+  "objective": "The administrator's password is long and random, and you do not know it. Sign in as the administrator anyway.",
+  "family": "injection",
+  "subcategory": "nosqli",
+  "difficulty": "medium",
+  "tags": [
+    "nosql",
+    "operator-injection",
+    "authentication-bypass",
+    "json"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/nosql-operator-injection/server.ts"
+  },
+  "verifier": {
+    "condition": "A login as the admin account succeeds although the submitted username or password was a query object rather than a plain string."
+  },
+  "weakness": "The login endpoint passes the parsed JSON body straight into a document-store query, so a field can carry a query operator instead of a value.",
+  "vulnerableEndpoint": "POST /api/login",
+  "seededData": "In-memory document store: user alice (staff, known password) and an admin with a random per-instance password. In-memory.",
+  "credentials": [
+    {
+      "label": "Staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "The login form sends JSON to the API."
+    }
+  ],
+  "hints": [
+    "Watch what the login form actually sends to the server. What type is each field?",
+    "A document store compares fields using a query language. What if a field held something other than text?",
+    "You are not limited to what the form lets you type."
+  ],
+  "spoilers": [
+    "$ne",
+    "$gt",
+    "$regex"
+  ],
+  "burpNotes": "Intercept the login request and edit the JSON body in Repeater — the Content-Type is application/json, so you can change the shape of the values, not just their text."
+}

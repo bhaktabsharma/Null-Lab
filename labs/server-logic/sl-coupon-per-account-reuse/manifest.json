@@ -1,0 +1,43 @@
+{
+  "id": "sl-coupon-per-account-reuse",
+  "version": "1.0.0",
+  "title": "Parcelpost — Welcome Offer",
+  "objective": "The welcome offer can only be redeemed once. Redeem it more than once.",
+  "family": "server-logic",
+  "subcategory": "coupon-account-binding",
+  "difficulty": "easy",
+  "tags": [
+    "coupons",
+    "registration",
+    "business-logic"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-coupon-per-account-reuse/server.ts"
+  },
+  "verifier": {
+    "condition": "The one-time code has been redeemed by two or more different accounts."
+  },
+  "weakness": "The welcome code's one-time rule is enforced per account (the redemption check asks whether this account used it) instead of per code, and registration is open, so any number of accounts can redeem it.",
+  "vulnerableEndpoint": "POST /api/coupons/redeem",
+  "seededData": "Account alice and the welcome code on the offers page; registering further accounts is open. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has not redeemed the offer yet."
+    }
+  ],
+  "hints": [
+    "Work out what exactly the server compares when it decides a code has already been used.",
+    "Once for whom? Think about what an account is and how easily you can get another.",
+    "Redeem the code, then do it again from a second account that you register yourself."
+  ],
+  "burpNotes": "Capture the redemption and the error you get when you repeat it.",
+  "spoilers": [
+    "/api/register",
+    "/api/coupons/redeem"
+  ]
+}

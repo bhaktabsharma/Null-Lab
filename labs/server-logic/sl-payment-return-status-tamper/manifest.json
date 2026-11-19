@@ -1,0 +1,44 @@
+{
+  "id": "sl-payment-return-status-tamper",
+  "version": "1.0.0",
+  "title": "Tix — Checkout Return",
+  "objective": "Your tickets are awaiting payment, and your card is going to be declined. Get the order marked as paid anyway.",
+  "family": "server-logic",
+  "subcategory": "payment-return-integrity",
+  "difficulty": "medium",
+  "tags": [
+    "payments",
+    "signatures",
+    "redirects",
+    "business-logic"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-payment-return-status-tamper/server.ts"
+  },
+  "verifier": {
+    "condition": "An order is marked paid although the card processor's own record for it is declined."
+  },
+  "weakness": "The return URL's signature covers only the order id and amount, not the status parameter, and the shop trusts the status from the URL, so a declined payment's redirect can be edited to report success with a still-valid signature.",
+  "vulnerableEndpoint": "GET /checkout/return",
+  "seededData": "Order t-501 (concert tickets, $180.00) awaiting payment, and a mock card processor with a succeeding and a declining test card. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has one order awaiting payment."
+    }
+  ],
+  "hints": [
+    "Pay with the card that is declined and watch where the browser is sent afterwards. Everything the shop learns about the payment is in that address.",
+    "The shop verifies a signature. Work out which of the values in the address it actually covers.",
+    "Change the status value in the return address to a successful one and keep the rest, signature included."
+  ],
+  "burpNotes": "Intercept the redirect after paying and read every parameter in it.",
+  "spoilers": [
+    "status=paid",
+    "&sig="
+  ]
+}

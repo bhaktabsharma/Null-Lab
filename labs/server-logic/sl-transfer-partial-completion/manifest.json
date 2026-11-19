@@ -1,0 +1,49 @@
+{
+  "id": "sl-transfer-partial-completion",
+  "version": "1.0.0",
+  "title": "Sendwise — Send Money",
+  "objective": "You have two accounts and a limited balance. Make the system hold more money than it was given.",
+  "family": "server-logic",
+  "subcategory": "partial-completion",
+  "difficulty": "medium",
+  "tags": [
+    "transfers",
+    "atomicity",
+    "partial-failure",
+    "business-logic"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-transfer-partial-completion/server.ts"
+  },
+  "verifier": {
+    "condition": "The total balance across all accounts is greater than the money originally in the system."
+  },
+  "weakness": "The transfer endpoint credits the recipient first and debits the sender second; when the debit is refused for insufficient funds the request returns 402 but the credit is never reversed, so money is created.",
+  "vulnerableEndpoint": "POST /api/transfers",
+  "seededData": "Accounts alice ($100.00), bob ($20.00) and carol ($50.00). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "First account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Balance $100.00."
+    },
+    {
+      "label": "Second account",
+      "username": "bob",
+      "password": "Bob-Sendwise!22",
+      "note": "Balance $20.00."
+    }
+  ],
+  "hints": [
+    "Transfers are more than one step. Try one that should fail and look at the balances afterwards — on both accounts.",
+    "A failure that comes after a step has already happened needs that step undone. Does it get undone?",
+    "Send more than your balance to your other account. The request fails; then check the recipient's balance."
+  ],
+  "burpNotes": "Check both accounts' balances before and after each request, including the failed ones.",
+  "spoilers": [
+    "/api/transfers"
+  ]
+}

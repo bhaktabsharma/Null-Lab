@@ -1,0 +1,38 @@
+{
+  "id": "sqli-time-based",
+  "version": "1.0.0",
+  "title": "PulseCheck — Slow Answers",
+  "objective": "The newsletter sign-up always gives the same answer and never shows an error. Yet the database holds a PIN for the admin console. Recover it and unlock the console.",
+  "family": "injection",
+  "subcategory": "sqli-time-blind",
+  "difficulty": "advanced",
+  "tags": [
+    "sqli",
+    "time-based",
+    "blind",
+    "scripting",
+    "sqlite"
+  ],
+  "estimatedMinutes": 45,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-time-based/server.ts"
+  },
+  "verifier": {
+    "condition": "The correct admin PIN — which exists only in the database and differs for every instance — is submitted to the admin unlock form."
+  },
+  "weakness": "A concatenated query in a response-identical endpoint can still be made to run a data-dependent delay, turning response time into a one-bit-at-a-time channel for exfiltration.",
+  "vulnerableEndpoint": "POST /subscribe (email field)",
+  "seededData": "SQLite: subscribers table and a settings table with a per-instance 6-digit admin PIN. Unlock attempts are limited to 10 wrong guesses per instance.",
+  "credentials": [],
+  "hints": [
+    "Compare how long different requests take. What could make a query slower only when something about the data is true?",
+    "You cannot read the PIN directly, but you can ask the database yes/no questions about it. Think about one character at a time.",
+    "The unlock form allows only a few wrong guesses, so guessing blindly is not an option — you have to extract it."
+  ],
+  "spoilers": [
+    "CASE WHEN",
+    "substr("
+  ],
+  "burpNotes": "Measure response times in Repeater. This lab's database exposes sleep_ms(milliseconds) — SQLite has no built-in sleep, but many engines do — capped at 2 seconds per call. Scripting the extraction (Burp Intruder, Python requests, curl in a loop) is expected."
+}

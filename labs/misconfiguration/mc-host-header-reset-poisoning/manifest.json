@@ -1,0 +1,42 @@
+{
+  "id": "mc-host-header-reset-poisoning",
+  "version": "1.0.0",
+  "title": "MailFlow — Reset Link Host",
+  "objective": "Request a password reset and watch the email that goes out. Get that email to contain a link pointing at a domain you control instead.",
+  "family": "misconfiguration",
+  "subcategory": "host-header-trust",
+  "difficulty": "hard",
+  "tags": [
+    "host-header",
+    "password-reset-poisoning",
+    "mock-email-sink"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/misconfiguration/mc-host-header-reset-poisoning/server.ts"
+  },
+  "verifier": {
+    "condition": "A password-reset email is sent whose reset link's host is not this application's own configured host."
+  },
+  "weakness": "The password-reset link is built from the incoming request's Host header rather than a fixed, server-configured domain, so a forged Host header changes which domain the link sent to the victim points at.",
+  "vulnerableEndpoint": "POST /forgot-password (link built from req.headers.host)",
+  "seededData": "User alice. A local mock email sink (never a real mail server) records every message a learner can read at /mail/outbox.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Request a reset normally first and read the resulting email."
+    }
+  ],
+  "hints": [
+    "Request a password reset normally and open /mail/outbox to read the email that went out. Look closely at the link's domain.",
+    "That domain came from somewhere in your request, not from a fixed setting on the server.",
+    "Try sending the same reset request with a different Host header."
+  ],
+  "spoilers": [
+    "req.headers.host"
+  ],
+  "burpNotes": "Send the reset request in Repeater with the Host header changed to a domain you choose, then check /mail/outbox for the resulting link."
+}

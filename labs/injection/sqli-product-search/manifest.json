@@ -1,0 +1,45 @@
+{
+  "id": "sqli-product-search",
+  "version": "1.0.0",
+  "title": "SearchPortal — Product Search UNION Injection",
+  "objective": "The product category filter runs directly against a real SQLite database. Use a UNION-based SQL injection to pull data out of a table the search feature was never meant to touch.",
+  "family": "injection",
+  "subcategory": "sqli-union-based",
+  "difficulty": "medium",
+  "tags": [
+    "sqli",
+    "union-based",
+    "injection",
+    "searchportal"
+  ],
+  "estimatedMinutes": 25,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-product-search/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/sqli-product-search",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "A UNION SELECT appended to the category filter causes a row from the hidden vault table (not the products table) to appear in the search results.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [],
+  "weakness": "The category filter is concatenated into a SELECT, so a UNION can pull rows from a table the page never meant to expose.",
+  "vulnerableEndpoint": "GET /search?category=",
+  "seededData": "SQLite: products table plus a hidden vault table; per-instance file.",
+  "spoilers": [
+    "UNION SELECT",
+    "' OR"
+  ],
+  "solutionHint": "The category filter is a plain text box, not a dropdown — the app trusts whatever you type straight into a SQL query. The results table has 4 columns: id, name, price, category. Can you UNION SELECT 4 values from somewhere else?"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "sl-deserialization-trusted-types",
+  "version": "1.0.0",
+  "title": "PrefSync — Import Your Settings",
+  "objective": "PrefSync lets you import a settings file exported from another account. Use it to grant yourself admin, by naming something the import feature was never meant to construct.",
+  "family": "server-logic",
+  "subcategory": "insecure-deserialization",
+  "difficulty": "hard",
+  "tags": [
+    "deserialization",
+    "object-injection",
+    "type-confusion"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-deserialization-trusted-types/server.ts"
+  },
+  "verifier": {
+    "condition": "Importing a settings payload results in the signed-in account's admin flag being set, via a payload whose own declared type is not 'ThemePreference' or 'NotificationPreference'."
+  },
+  "weakness": "The import feature trusts a type name embedded in the uploaded data to decide which internal class to construct, rather than only ever constructing the two preference types the feature is meant for, so naming an unrelated internal type reaches code the public import feature was never meant to reach.",
+  "vulnerableEndpoint": "POST /settings/import (the __type field in the payload selects which class is constructed)",
+  "seededData": "User alice (not an admin). A registry of constructable types includes two public preference types plus one internal type never meant to be reachable from this endpoint.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "A normal settings export/import round-trip never touches your admin status."
+    }
+  ],
+  "hints": [
+    "Export your own settings first and look at the shape of the file you get back. What field says what kind of thing it is?",
+    "The import feature decides what to build based on a type name in the data you give it — not a fixed list baked into the endpoint itself.",
+    "Application code often has internal building blocks that were never meant to be reachable from outside — but if the mechanism that picks one isn't itself restricted, naming one directly might still work."
+  ],
+  "spoilers": [
+    "AdminGrant"
+  ],
+  "burpNotes": "Export your settings to see the exact JSON shape, then send an import request in Repeater with __type changed to something else and see what the registry of constructable types will accept."
+}

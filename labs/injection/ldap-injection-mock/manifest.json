@@ -1,0 +1,44 @@
+{
+  "id": "ldap-injection-mock",
+  "version": "1.0.0",
+  "title": "StaffDirectory — Filter Injection",
+  "objective": "Staff sign in against the company directory. The directory administrator's password is long and random. Sign in as the administrator without it.",
+  "family": "injection",
+  "subcategory": "ldap-injection",
+  "difficulty": "hard",
+  "tags": [
+    "ldap",
+    "filter-injection",
+    "authentication-bypass",
+    "mock-directory"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/ldap-injection-mock/server.ts"
+  },
+  "verifier": {
+    "condition": "A login as the 'admin' directory entry succeeds although the submitted password is not the administrator's real password."
+  },
+  "weakness": "The login builds an LDAP search filter by string concatenation, so filter metacharacters in the username or password change the structure of the search.",
+  "vulnerableEndpoint": "POST /login (uid and userPassword in the search filter)",
+  "seededData": "A local in-memory mock directory (no network): alice and bob with known passwords, and an admin entry whose password is random per instance.",
+  "credentials": [
+    {
+      "label": "Staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in to see the directory."
+    }
+  ],
+  "hints": [
+    "Errors from the directory are shown verbatim. What does a deliberately broken input tell you about how your input is used?",
+    "Your input becomes part of a structured search expression made of parentheses. What if you closed one early?",
+    "Directory filters have wildcards and always-true constructs, not just equality."
+  ],
+  "spoilers": [
+    ")(&)",
+    "userPassword=*"
+  ],
+  "burpNotes": "Send the login to Repeater and vary each field separately. The directory here is a local mock that implements an LDAP search-filter evaluator; like some real servers it is lenient about text after the first complete filter."
+}

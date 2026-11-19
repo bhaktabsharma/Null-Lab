@@ -1,0 +1,42 @@
+{
+  "id": "sl-mass-assignment-profile",
+  "version": "1.0.0",
+  "title": "ProfileHub — Update My Profile",
+  "objective": "Update your display name through the profile form, then use the same endpoint to grant yourself a role the form never offers.",
+  "family": "server-logic",
+  "subcategory": "mass-assignment",
+  "difficulty": "easy",
+  "tags": [
+    "mass-assignment",
+    "over-posting",
+    "api"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-mass-assignment-profile/server.ts"
+  },
+  "verifier": {
+    "condition": "A profile update request sets the signed-in account's role to 'admin' although the form only exposes displayName and bio."
+  },
+  "weakness": "The update handler merges the entire request body directly onto the stored user record, rather than copying only the fields the profile form is meant to expose, so any property name on the record can be set by whoever sends the request.",
+  "vulnerableEndpoint": "PATCH /api/profile (merges the whole request body onto the user record)",
+  "seededData": "User alice (role 'user'). In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "The profile form only has fields for display name and bio."
+    }
+  ],
+  "hints": [
+    "Update your display name normally first and look at the request the form actually sends.",
+    "The form only shows two fields, but that doesn't mean the server only accepts two fields.",
+    "Try adding a property to the request body that isn't part of the form at all — something that sounds like it would control permissions."
+  ],
+  "spoilers": [
+    "Object.assign"
+  ],
+  "burpNotes": "Send a normal profile update to Repeater, then add an extra JSON property to the body that isn't one of the form's own fields."
+}

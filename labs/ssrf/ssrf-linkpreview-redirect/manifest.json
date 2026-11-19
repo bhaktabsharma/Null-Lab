@@ -1,0 +1,36 @@
+{
+  "id": "ssrf-linkpreview-redirect",
+  "version": "1.0.0",
+  "title": "LinkPreview — Trust, But Verify... Once",
+  "objective": "The link preview feature correctly checks a URL's host against an allowlist before fetching it. Get it to end up reading an internal service anyway.",
+  "family": "ssrf",
+  "subcategory": "ssrf-host-validation-bypass",
+  "difficulty": "hard",
+  "tags": [
+    "ssrf",
+    "redirect",
+    "validation-bypass",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-linkpreview-redirect/server.ts"
+  },
+  "verifier": {
+    "condition": "The final response shown to the user comes from a host that was never checked against the allowlist, reached after the initial, correctly-validated request redirected elsewhere."
+  },
+  "weakness": "The allowlist check is applied only to the URL the user submits; any redirect that request's target returns is followed automatically without re-validating the redirect's destination.",
+  "vulnerableEndpoint": "POST /preview (url field; validated once, then redirects are followed unchecked)",
+  "seededData": "A simulated network: an allowlisted host that issues a redirect, and an internal-only service it redirects to.",
+  "credentials": [],
+  "hints": [
+    "The allowlist genuinely works — try a non-allowlisted URL directly and confirm it's rejected.",
+    "Now try an ALLOWLISTED url that itself points somewhere else. Does the app check where it ends up, or only where it started?",
+    "One of the allowlisted hosts in this lab doesn't serve content directly — it redirects. Where does that redirect go?"
+  ],
+  "spoilers": [
+    "redirectTo"
+  ],
+  "burpNotes": "Try the allowlisted redirecting URL directly in the preview form and see what content comes back — compare it against what the redirecting host itself would show."
+}

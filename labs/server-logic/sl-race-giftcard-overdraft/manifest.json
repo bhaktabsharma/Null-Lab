@@ -1,0 +1,36 @@
+{
+  "id": "sl-race-giftcard-overdraft",
+  "version": "1.0.0",
+  "title": "QuickCart — Gift Card Balance",
+  "objective": "A $50 gift card should only ever pay out $50 in total. Get it to pay out more than that.",
+  "family": "server-logic",
+  "subcategory": "race-condition",
+  "difficulty": "hard",
+  "tags": [
+    "race-condition",
+    "toctou",
+    "balance-manipulation",
+    "concurrency"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-race-giftcard-overdraft/server.ts"
+  },
+  "verifier": {
+    "condition": "The total amount successfully withdrawn from the gift card exceeds its starting balance."
+  },
+  "weakness": "The withdrawal handler checks the current balance is sufficient, then — after an awaited gap — deducts the amount, so concurrent withdrawals can each see the original, pre-deduction balance and all be approved.",
+  "vulnerableEndpoint": "POST /giftcard/withdraw (check-then-deduct, with an awaited gap between the two)",
+  "seededData": "One gift card starting with a $50 balance. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Withdraw a small amount normally first and confirm the balance updates correctly for a single request.",
+    "Confirm that a sequential over-the-balance withdrawal is correctly refused.",
+    "Fire several valid-sized withdrawal requests at the same instant instead of one after another."
+  ],
+  "spoilers": [
+    "check-then-deduct"
+  ],
+  "burpNotes": "Send a burst of equally-sized withdrawal requests, each individually within the starting balance, all at the same time."
+}

@@ -1,0 +1,37 @@
+{
+  "id": "ssrf-webhook-destination-abuse",
+  "version": "1.0.0",
+  "title": "PaySync — Custom Webhook Destination",
+  "objective": "PaySync will POST a payment event, including a live-looking signing secret, to whatever webhook URL you configure. Point it at an internal service instead of your own server, and collect the secret.",
+  "family": "ssrf",
+  "subcategory": "ssrf-webhook-abuse",
+  "difficulty": "medium",
+  "tags": [
+    "ssrf",
+    "webhook",
+    "data-exfiltration",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-webhook-destination-abuse/server.ts"
+  },
+  "verifier": {
+    "condition": "A webhook delivery carrying the payment payload's signing secret is sent to a simulated internal-only service rather than an external destination."
+  },
+  "weakness": "A legitimate feature that sends sensitive data to a user-configured URL has no restriction on which hosts that URL may point to, so it can be redirected to reach internal-only services with sensitive data attached, rather than merely being tricked into fetching one.",
+  "vulnerableEndpoint": "POST /webhooks/configure then POST /webhooks/trigger-test (destination accepts any host)",
+  "seededData": "A simulated internal secrets-store service at internal-secrets.lab:80 that logs whatever it's sent. A per-instance synthetic signing secret included in every webhook delivery.",
+  "credentials": [],
+  "hints": [
+    "Configure the webhook destination as your own external-looking URL first and trigger a test delivery. What does the payload contain?",
+    "Nothing checks where the webhook destination actually points. What if it pointed somewhere other than an external server?",
+    "This lab's hints mention an internal hostname elsewhere — try configuring the webhook to deliver there."
+  ],
+  "spoilers": [
+    "internal-secrets.lab",
+    "signingSecret"
+  ],
+  "burpNotes": "Configure the webhook URL in Repeater, then trigger a test delivery and check whatever observability the internal target exposes for what it received."
+}

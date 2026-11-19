@@ -1,0 +1,36 @@
+{
+  "id": "ssrf-webhook-blind-callback",
+  "version": "1.0.0",
+  "title": "PulseMonitor — Fire and Forget",
+  "objective": "The uptime checker pings a URL and tells you nothing but 'done' — no status, no body, nothing. Prove you can still make it reach an internal-only service, blind.",
+  "family": "ssrf",
+  "subcategory": "ssrf-blind-callback",
+  "difficulty": "hard",
+  "tags": [
+    "ssrf",
+    "blind",
+    "out-of-band",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-webhook-blind-callback/server.ts"
+  },
+  "verifier": {
+    "condition": "The simulated internal admin service's own side effect (a counter it increments) changes as a result of a request submitted through the blind checker, although the checker's response reveals nothing about what happened."
+  },
+  "weakness": "The server makes an outbound request to a user-supplied URL and discards everything about the result, so there is no direct read-back — but the request itself still reaches wherever it's pointed, which is enough to trigger a side effect on an internal service.",
+  "vulnerableEndpoint": "POST /check (url field; fetched server-side, response fully discarded)",
+  "seededData": "A simulated internal admin service at internal-admin.lab:80 whose /ping-count path increments an in-memory counter on every request it receives.",
+  "credentials": [],
+  "hints": [
+    "The checker's response is always the same no matter what you send it. Does that mean nothing happened on the server?",
+    "You can't read anything back directly here. Is there somewhere else in this application that might show the EFFECT of a request, even without showing its content?",
+    "This lab exposes a small internal status page for its own debugging. Check it before and after you try something."
+  ],
+  "spoilers": [
+    "internal-admin.lab"
+  ],
+  "burpNotes": "Send a check request for a candidate internal URL, then separately fetch /__debug/ping-count to see whether it changed — the checker's own response will never tell you anything."
+}

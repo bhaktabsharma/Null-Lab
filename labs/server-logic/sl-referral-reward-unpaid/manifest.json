@@ -1,0 +1,44 @@
+{
+  "id": "sl-referral-reward-unpaid",
+  "version": "1.0.0",
+  "title": "Bookly — Refer a Friend",
+  "objective": "You earn a reward when a friend you refer pays for their first order. Collect a referral reward for a friend who never paid for anything.",
+  "family": "server-logic",
+  "subcategory": "referral-reward-trigger",
+  "difficulty": "medium",
+  "tags": [
+    "referrals",
+    "rewards",
+    "state-machine",
+    "business-logic"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-referral-reward-unpaid/server.ts"
+  },
+  "verifier": {
+    "condition": "A referred user's first order is cancelled after it triggered a reward, and that user never paid for any order."
+  },
+  "weakness": "The referral reward is credited when the friend's first order is created rather than when it is paid, and is never reversed when the order is cancelled, so the reward can be collected for orders that were never paid.",
+  "vulnerableEndpoint": "POST /api/orders (reward trigger) and POST /api/orders/:id/cancel",
+  "seededData": "Account alice with a referral code; further accounts can register with a code. Orders and credits live in memory and reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has a referral code on the account page."
+    }
+  ],
+  "hints": [
+    "Read the exact conditions of the reward, then watch the exact moment your credit changes.",
+    "Rewards are tied to events in an order's life — creating, paying, cancelling. Which one actually triggers yours?",
+    "Register a friend with your referral code, have them place an order, and cancel it before paying."
+  ],
+  "burpNotes": "You will need a second account. Watch your own credit as the friend's order moves between states.",
+  "spoilers": [
+    "/api/orders",
+    "/cancel"
+  ]
+}

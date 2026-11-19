@@ -1,0 +1,43 @@
+{
+  "id": "sl-topup-confirmation-replay",
+  "version": "1.0.0",
+  "title": "Walletly — Top Up",
+  "objective": "Top-ups add to your wallet once, after payment is confirmed. Make one payment credit your wallet more than once.",
+  "family": "server-logic",
+  "subcategory": "transaction-replay",
+  "difficulty": "easy",
+  "tags": [
+    "payments",
+    "replay",
+    "idempotency",
+    "business-logic"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-topup-confirmation-replay/server.ts"
+  },
+  "verifier": {
+    "condition": "A single top-up transaction has credited the wallet more than once."
+  },
+  "weakness": "The top-up confirmation endpoint validates the signature and the owner but never records the transaction as consumed, so the same signed confirmation credits the wallet every time it is replayed.",
+  "vulnerableEndpoint": "POST /api/topups/confirm",
+  "seededData": "Account alice with an empty wallet. Transactions live in memory and reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has an empty wallet."
+    }
+  ],
+  "hints": [
+    "Do a top-up with Burp running and look at every request involved, not only the one that starts it.",
+    "The confirmation carries a signature. Ask what the server remembers about a confirmation after using it.",
+    "Send the same confirmation request again — as many times as you like."
+  ],
+  "burpNotes": "Repeater is enough: capture the confirmation and send it again.",
+  "spoilers": [
+    "/api/topups/confirm"
+  ]
+}

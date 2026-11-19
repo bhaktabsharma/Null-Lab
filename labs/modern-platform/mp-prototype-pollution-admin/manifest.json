@@ -1,0 +1,38 @@
+{
+  "id": "mp-prototype-pollution-admin",
+  "version": "1.0.0",
+  "title": "SettingsPanel — Just Merge It",
+  "objective": "The settings panel merges your preferences into its config object client-side. Use that merge to make the app treat you as an administrator, in your own browser.",
+  "family": "modern-platform",
+  "subcategory": "prototype-pollution",
+  "difficulty": "hard",
+  "tags": [
+    "prototype-pollution",
+    "client-side",
+    "javascript",
+    "admin-bot"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/modern-platform/mp-prototype-pollution-admin/server.ts"
+  },
+  "verifier": {
+    "requiresBrowserBot": true,
+    "adminCookieName": "sp_admin_unused",
+    "condition": "After the settings merge runs, the page's own isAdmin() check returns true for a session that was never granted admin, because Object.prototype itself was polluted."
+  },
+  "weakness": "A client-side settings merge recursively copies properties from untrusted JSON onto a config object without excluding '__proto__', so a crafted settings payload can add a property to Object.prototype itself, affecting every plain object in the page from then on.",
+  "vulnerableEndpoint": "Client-side deepMerge(config, JSON.parse(savedSettings)) — no key exclusion for __proto__/constructor/prototype",
+  "seededData": "A settings panel that stores and re-applies a JSON blob client-side via a naive recursive merge. No server-side component is involved in the vulnerability itself.",
+  "credentials": [],
+  "hints": [
+    "Save a normal settings change first and reload the page — see how it gets re-applied on load.",
+    "A recursive object merge usually works key by key. One particular key name lets you step outside the object you're copying into, into something shared by every object in the page.",
+    "Once a property exists on Object.prototype, any plain object that doesn't already define that property will appear to have it too — including objects the page never meant to expose it on."
+  ],
+  "spoilers": [
+    "Object.prototype"
+  ],
+  "burpNotes": "This one runs entirely in the browser — use 'Simulate admin visit' with a settings payload containing a __proto__ key, since the vulnerability has nothing to do with the HTTP request itself."
+}

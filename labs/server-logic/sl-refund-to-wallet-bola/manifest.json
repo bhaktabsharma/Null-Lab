@@ -1,0 +1,44 @@
+{
+  "id": "sl-refund-to-wallet-bola",
+  "version": "1.0.0",
+  "title": "Mercato — Instant Refund to Wallet",
+  "objective": "Delivered orders can be refunded to your store wallet in one click. Add store credit to your wallet for an order that is not yours.",
+  "family": "server-logic",
+  "subcategory": "refund-initiation",
+  "difficulty": "medium",
+  "tags": [
+    "refunds",
+    "bola",
+    "idor",
+    "business-logic"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-refund-to-wallet-bola/server.ts"
+  },
+  "verifier": {
+    "condition": "A user's wallet is credited from an order that belongs to a different user."
+  },
+  "weakness": "The wallet-refund endpoint checks that the order is delivered and not yet refunded, but not that it belongs to the caller, and credits the wallet of whoever calls it.",
+  "vulnerableEndpoint": "POST /api/orders/:id/refund-to-wallet",
+  "seededData": "Users alice and dana with delivered orders o-3001 to o-3003 and a pending order o-3004. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has two orders: one delivered, one pending."
+    }
+  ],
+  "hints": [
+    "Look at what identifies an order in the request, and what is — and is not — tied to your account when you refund one.",
+    "Order ids follow a pattern. See what the server says about an order you cannot list.",
+    "Request the wallet refund for an order id that is not in your list and watch which wallet receives the money."
+  ],
+  "burpNotes": "Refund one of your own orders with Burp running and note which parts of the request identify the order and the account.",
+  "spoilers": [
+    "refund-to-wallet",
+    "/api/orders/o-"
+  ]
+}

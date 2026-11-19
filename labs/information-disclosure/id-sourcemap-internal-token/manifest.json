@@ -1,0 +1,44 @@
+{
+  "id": "id-sourcemap-internal-token",
+  "version": "1.0.0",
+  "title": "Panelio — Admin Dashboard",
+  "objective": "The dashboard's JavaScript bundle is minified for production. Call an internal reporting endpoint that needs a bearer token you were never given.",
+  "family": "information-disclosure",
+  "subcategory": "source-map-exposure",
+  "difficulty": "medium",
+  "tags": [
+    "source-maps",
+    "secrets",
+    "static-assets",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-sourcemap-internal-token/server.ts"
+  },
+  "verifier": {
+    "condition": "The internal reporting endpoint is called with a valid bearer token that was never shown anywhere in the rendered page."
+  },
+  "weakness": "The production bundle ships with its source map, and the map's embedded original source contains an internal API token that the minified code alone does not reveal in a readable form.",
+  "vulnerableEndpoint": "GET /api/internal/reports",
+  "seededData": "A minified JavaScript bundle at /assets/app.min.js with a matching .map file. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sees only the minified bundle by default."
+    }
+  ],
+  "hints": [
+    "Open your browser's developer tools while the dashboard loads and look at exactly what the page requests.",
+    "A minified file can usually be de-minified by the browser itself, given the right companion file alongside it.",
+    "Request the file with the same name as the bundle plus .map, and read through the original source it reveals."
+  ],
+  "burpNotes": "Browse the page once with Burp running so you see every static asset it loads, not just the HTML.",
+  "spoilers": [
+    ".map",
+    "sourcemappingurl"
+  ]
+}

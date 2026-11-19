@@ -1,0 +1,37 @@
+{
+  "id": "ssti-mock-template",
+  "version": "1.0.0",
+  "title": "GreetCards — Template Surprise",
+  "objective": "The card preview greets whoever you name. The application keeps a secret key in its settings — make the preview reveal it.",
+  "family": "injection",
+  "subcategory": "server-side-template-injection",
+  "difficulty": "medium",
+  "tags": [
+    "ssti",
+    "template-injection",
+    "information-disclosure",
+    "constrained-engine"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/ssti-mock-template/server.ts"
+  },
+  "verifier": {
+    "condition": "The rendered card contains the application's secret key, which only the template context holds."
+  },
+  "weakness": "User input is concatenated into the template SOURCE instead of being passed as data, so template expressions in it are evaluated against the render context.",
+  "vulnerableEndpoint": "GET /card?name=",
+  "seededData": "A small constrained template engine (data-only: no code, files or processes reachable) rendering with a context that includes app settings and a per-instance secret key.",
+  "credentials": [],
+  "hints": [
+    "Does the page treat what you type as plain text, or does something interpret it? Try input that would mean something to a template language.",
+    "Look at how the occasion appears in the greeting. The same mechanism that fills that in may be available to you.",
+    "Template engines render against a context of named values. What would a developer put in there besides the visitor's name?"
+  ],
+  "spoilers": [
+    "config.SECRET_KEY",
+    "{{ config"
+  ],
+  "burpNotes": "Try arithmetic or a simple expression first to confirm whether input is being evaluated, then explore what the engine lets you reference. This engine is a deliberately constrained, data-only evaluator: it can read what is in its context and nothing else."
+}

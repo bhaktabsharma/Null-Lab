@@ -1,0 +1,36 @@
+{
+  "id": "ssrf-cloud-metadata-widget",
+  "version": "1.0.0",
+  "title": "CloudOps Dashboard — Instance Info Widget",
+  "objective": "A dashboard widget shows live status from a URL you configure. Point it at the one address every cloud instance can reach about itself, and read the credentials sitting there.",
+  "family": "ssrf",
+  "subcategory": "ssrf-basic",
+  "difficulty": "medium",
+  "tags": [
+    "ssrf",
+    "cloud-metadata",
+    "credential-theft",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-cloud-metadata-widget/server.ts"
+  },
+  "verifier": {
+    "condition": "The widget's displayed content contains the simulated instance-role credentials served only at the cloud metadata address."
+  },
+  "weakness": "The widget fetches whatever URL is configured for it with no restriction, and cloud compute platforms by convention expose an unauthenticated instance-metadata service at a fixed, well-known address reachable only from the instance itself — exactly the kind of internal-only target SSRF is used to reach.",
+  "vulnerableEndpoint": "POST /widget/configure then GET /dashboard (fetches the configured URL server-side, no restriction)",
+  "seededData": "A simulated network (never real sockets — see lab-sdk's MockInternalNet) with one service at the well-known cloud metadata address, 169.254.169.254, returning synthetic instance-role credentials.",
+  "credentials": [],
+  "hints": [
+    "Configure the widget with a normal-looking status URL first and see how it renders.",
+    "Every major cloud platform exposes a metadata service at the exact same link-local address, specifically because it's only reachable from the instance itself — never from the outside.",
+    "That address is 169.254.169.254. Try configuring the widget to point there."
+  ],
+  "spoilers": [
+    "169.254.169.254"
+  ],
+  "burpNotes": "Configure the widget's source URL directly in Repeater — no browser needed, since the fetch happens entirely server-side."
+}

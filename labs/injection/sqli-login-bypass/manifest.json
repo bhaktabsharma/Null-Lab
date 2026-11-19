@@ -1,0 +1,52 @@
+{
+  "id": "sqli-login-bypass",
+  "version": "1.0.0",
+  "title": "SearchPortal — Login SQL Injection Bypass",
+  "objective": "The login form checks credentials with a hand-built SQL query. Log in as the admin account without ever knowing the admin password.",
+  "family": "injection",
+  "subcategory": "sqli-auth-bypass",
+  "difficulty": "medium",
+  "tags": [
+    "sqli",
+    "auth-bypass",
+    "injection",
+    "searchportal"
+  ],
+  "estimatedMinutes": 20,
+  "prerequisites": [],
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-login-bypass/server.ts"
+  },
+  "docker": {
+    "image": "nulllab-lab/sqli-login-bypass",
+    "dockerfile": "runtime/compose/lab.Dockerfile"
+  },
+  "network": {
+    "allowOutbound": []
+  },
+  "resourceLimits": {
+    "memoryMb": 128,
+    "cpus": 0.5
+  },
+  "verifier": {
+    "condition": "The login query is manipulated so that the server authenticates the request as the admin account despite the admin's real password never being supplied.",
+    "requiresBrowserBot": false
+  },
+  "credentials": [
+    {
+      "label": "Regular customer account",
+      "username": "dana",
+      "password": "practice123",
+      "note": "Use this to see the normal login flow first."
+    }
+  ],
+  "weakness": "Login builds its SQL by string concatenation, so crafted credentials can authenticate as admin without the password.",
+  "vulnerableEndpoint": "POST /login",
+  "seededData": "SQLite: users table with an admin whose real password is never given; per-instance file.",
+  "spoilers": [
+    "' OR",
+    "1=1"
+  ],
+  "solutionHint": "The login query is built by gluing your username and password straight into a SQL string. What happens to the rest of the query if your username ends with a SQL comment marker?"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "ssrf-weather-substring-bypass",
+  "version": "1.0.0",
+  "title": "WeatherWidget — Trusted Partner Only",
+  "objective": "The weather widget only accepts URLs from the official weather partner — supposedly. Get it to fetch a simulated internal service instead.",
+  "family": "ssrf",
+  "subcategory": "ssrf-host-validation-bypass",
+  "difficulty": "medium",
+  "tags": [
+    "ssrf",
+    "allowlist-bypass",
+    "url-validation",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-weather-substring-bypass/server.ts"
+  },
+  "verifier": {
+    "condition": "A fetch whose true host, as parsed by a standard URL parser, is NOT the trusted weather partner's host still passes validation and reaches a simulated internal service."
+  },
+  "weakness": "The allowlist check tests whether the trusted hostname appears anywhere in the full URL string, rather than checking the URL's actual parsed hostname — so the trusted string can appear harmlessly in the path or query while the real host is anything at all.",
+  "vulnerableEndpoint": "POST /widget-data (url field; validated with url.includes(trustedHost) on the whole string)",
+  "seededData": "A simulated network with the real partner at api.weather-partner.test:443 and an internal reporting service at internal-reports.lab:80.",
+  "credentials": [],
+  "hints": [
+    "Try the real partner URL first, then try a completely unrelated URL. Both extremes behave as you'd expect — so where's the gap?",
+    "The validator checks whether the trusted hostname appears somewhere in the URL. A URL's host isn't the only place a string can appear.",
+    "Put the trusted hostname in the URL's path or query string instead of where the actual host goes."
+  ],
+  "spoilers": [
+    "includes(",
+    "internal-reports.lab"
+  ],
+  "burpNotes": "Try putting the trusted hostname as a path segment or query value on a URL whose actual host is something else entirely, and watch whether validation still passes."
+}

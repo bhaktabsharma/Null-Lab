@@ -1,0 +1,43 @@
+{
+  "id": "sl-giftcard-self-transfer",
+  "version": "1.0.0",
+  "title": "Giftly — Move Card Balance",
+  "objective": "You hold two gift cards and can move balance between them. Hold more gift-card money than was ever issued to you.",
+  "family": "server-logic",
+  "subcategory": "balance-aliasing",
+  "difficulty": "medium",
+  "tags": [
+    "gift-cards",
+    "aliasing",
+    "state",
+    "business-logic"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-giftcard-self-transfer/server.ts"
+  },
+  "verifier": {
+    "condition": "The caller's gift cards hold more money in total than was issued to them."
+  },
+  "weakness": "The transfer loads independent copies of the source and destination cards, subtracts from one and adds to the other, and writes both back, so when both are the same card the second write overwrites the first and the amount is added without being deducted.",
+  "vulnerableEndpoint": "POST /api/giftcards/transfer",
+  "seededData": "Cards g-100 ($50.00) and g-101 ($5.00) for alice and g-200 ($200.00) for dana. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Holds two gift cards worth $55.00 in total."
+    }
+  ],
+  "hints": [
+    "Think about the edge cases of a move: what are the two cards allowed to be?",
+    "A transfer has a source and a destination. What happens if they are the same thing?",
+    "Move a card's balance to itself and check the balance afterwards."
+  ],
+  "burpNotes": "Try the unusual inputs to the move request and watch the balances.",
+  "spoilers": [
+    "/api/giftcards/transfer"
+  ]
+}

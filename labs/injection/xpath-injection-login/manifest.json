@@ -1,0 +1,43 @@
+{
+  "id": "xpath-injection-login",
+  "version": "1.0.0",
+  "title": "ArchiveBox — XPath Login",
+  "objective": "Accounts are stored in an XML document and looked up with an XPath query. The archive administrator's password is long and random. Sign in as the administrator without it.",
+  "family": "injection",
+  "subcategory": "xpath-injection",
+  "difficulty": "medium",
+  "tags": [
+    "xpath",
+    "xml",
+    "authentication-bypass"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/xpath-injection-login/server.ts"
+  },
+  "verifier": {
+    "condition": "A login as the 'admin' account succeeds although the submitted password is not the administrator's real password."
+  },
+  "weakness": "The login builds an XPath predicate by string concatenation, so quotes and boolean operators in the input change what the query selects.",
+  "vulnerableEndpoint": "POST /login (username and password in the XPath predicate)",
+  "seededData": "An in-memory XML users document queried with the real xpath engine: alice and bob with known passwords, and an admin whose password is random per instance. Admin is the LAST user in the document.",
+  "credentials": [
+    {
+      "label": "Staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Sign in to see the archive."
+    }
+  ],
+  "hints": [
+    "Errors from the query engine are shown. Break your input on purpose and see what the engine says.",
+    "Your input sits inside a quoted string inside a predicate. What if you closed the quote yourself?",
+    "XPath predicates have boolean logic. Pay attention to which account the query returns first."
+  ],
+  "spoilers": [
+    "' or '1'='1",
+    "//user["
+  ],
+  "burpNotes": "Vary username and password independently in Repeater. Note which user the application reports being signed in as — the query can match several accounts, and the application takes the first."
+}

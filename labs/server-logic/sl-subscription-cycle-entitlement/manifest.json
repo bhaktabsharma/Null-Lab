@@ -1,0 +1,43 @@
+{
+  "id": "sl-subscription-cycle-entitlement",
+  "version": "1.0.0",
+  "title": "Streamly — Plan Changes",
+  "objective": "Pro unlocks 4K exports and costs three times as much as Basic. Use Pro features without being billed for Pro.",
+  "family": "server-logic",
+  "subcategory": "subscription-entitlement-timing",
+  "difficulty": "hard",
+  "tags": [
+    "subscriptions",
+    "billing",
+    "entitlements",
+    "business-logic"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-subscription-cycle-entitlement/server.ts"
+  },
+  "verifier": {
+    "condition": "A renewal bills less than the Pro price for a period in which Pro-only exports were produced."
+  },
+  "weakness": "Plan changes take effect immediately while charges are made only at renewal for whichever plan is active that day, and the Pro-only export checks only the current plan, so an account can use Pro features and switch back before it is billed.",
+  "vulnerableEndpoint": "POST /api/subscription/plan, POST /api/exports and POST /api/billing/advance",
+  "seededData": "Account alice on the Basic plan. A billing-date control stands in for time passing. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "On the Basic plan."
+    }
+  ],
+  "hints": [
+    "Find out when you are charged and when features switch on. Are they the same moment?",
+    "Plan changes are immediate and billing is not. Work out an order of actions that uses that gap.",
+    "Upgrade, produce a 4K export, switch back to Basic, then advance to the next renewal and look at the invoice."
+  ],
+  "burpNotes": "The billing-date control is the lab's stand-in for time passing. Observe exactly when each state changes.",
+  "spoilers": [
+    "/api/billing/advance"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "id": "sl-price-client-trusted",
+  "version": "1.0.0",
+  "title": "QuickCart — Your Price, As Submitted",
+  "objective": "Checkout trusts whatever price your browser sends it. Buy the featured item for a lot less than its real price.",
+  "family": "server-logic",
+  "subcategory": "price-manipulation",
+  "difficulty": "medium",
+  "tags": [
+    "business-logic",
+    "price-manipulation",
+    "client-trust"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-price-client-trusted/server.ts"
+  },
+  "verifier": {
+    "condition": "An order for the featured item is placed at a unit price lower than the catalog's real price for it."
+  },
+  "weakness": "The checkout step takes the unit price directly from the request instead of looking it up server-side from the product catalog, so the submitted price is whatever the client sends.",
+  "vulnerableEndpoint": "POST /checkout (unitPriceUsd field trusted verbatim)",
+  "seededData": "One featured product, a $1,200 standing desk, in a fixed catalog. In-memory order log.",
+  "credentials": [],
+  "hints": [
+    "Check out normally first and look at exactly which fields the checkout form actually sends.",
+    "The real price lives in the product catalog. Does checkout look it up there, or does it just believe what it's told?",
+    "A hidden form field is still just a value your browser sends — nothing stops you from sending a different one."
+  ],
+  "spoilers": [
+    "catalog lookup"
+  ],
+  "burpNotes": "Send the checkout request to Repeater and change unitPriceUsd directly — no need to touch the quantity."
+}

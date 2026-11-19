@@ -1,0 +1,37 @@
+{
+  "id": "sqli-second-order",
+  "version": "1.0.0",
+  "title": "ClubHouse — Registered Trouble",
+  "objective": "Registration and login are properly protected, and so is everything you type into forms. Yet something you registered with can still turn against the database later. Read the secret note in the hidden table.",
+  "family": "injection",
+  "subcategory": "sqli-second-order",
+  "difficulty": "hard",
+  "tags": [
+    "sqli",
+    "second-order",
+    "stored",
+    "sqlite"
+  ],
+  "estimatedMinutes": 35,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-second-order/server.ts"
+  },
+  "verifier": {
+    "condition": "A page returned to a signed-in member contains the secret note stored in the hidden table."
+  },
+  "weakness": "A value stored safely (parameterised insert) is later concatenated into a different query, so the payload fires on a later request rather than at the point of input.",
+  "vulnerableEndpoint": "GET /my-posts (author = stored username, concatenated)",
+  "seededData": "SQLite: users, posts (two seeded posts for alice) and a hidden vault table holding a per-instance secret note. Members self-register.",
+  "credentials": [],
+  "hints": [
+    "Try the obvious injection points: registration, login and the post form. Notice that they all handle odd input safely.",
+    "Safe storage does not mean safe use. Where does the application take a value it saved earlier and use it again?",
+    "The payload does not run when you register — it runs when something reads your stored data back."
+  ],
+  "spoilers": [
+    "vault",
+    "UNION"
+  ],
+  "burpNotes": "Register an account whose username contains SQL metacharacters, sign in as it, then walk through every page and watch which responses change."
+}

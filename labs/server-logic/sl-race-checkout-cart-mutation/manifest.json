@@ -1,0 +1,45 @@
+{
+  "id": "sl-race-checkout-cart-mutation",
+  "version": "1.0.0",
+  "title": "Pantrybox — Checkout",
+  "objective": "Check out and pay for exactly what is in your cart — or get items into an order that you did not pay for.",
+  "family": "server-logic",
+  "subcategory": "multi-endpoint-race",
+  "difficulty": "advanced",
+  "tags": [
+    "race-condition",
+    "checkout",
+    "multi-endpoint",
+    "business-logic"
+  ],
+  "estimatedMinutes": 40,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-race-checkout-cart-mutation/server.ts"
+  },
+  "verifier": {
+    "condition": "An order's items are worth at least $10 more than the amount authorized for it."
+  },
+  "weakness": "Checkout totals the cart and authorizes the card for that amount (a slow call) and only afterwards builds the order lines from the live cart, while the add-to-cart endpoint is not locked, so items added during authorization are shipped but never paid for.",
+  "vulnerableEndpoint": "POST /api/checkout and POST /api/cart/items",
+  "seededData": "Account alice with a cart holding one tea tin and a small catalogue of products. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has a cart with one item."
+    }
+  ],
+  "hints": [
+    "Checkout takes a noticeable moment. Work out what the server is doing during that time, and what it has already decided.",
+    "Two different endpoints touch the same cart. Each is correct alone; ask what each assumes the other is not doing.",
+    "Start checkout, and while it is still waiting add an expensive item to the cart from another request."
+  ],
+  "burpNotes": "Note how long checkout takes to answer, and which endpoint changes the cart.",
+  "spoilers": [
+    "/api/cart/items",
+    "at the same time",
+    "in parallel"
+  ]
+}

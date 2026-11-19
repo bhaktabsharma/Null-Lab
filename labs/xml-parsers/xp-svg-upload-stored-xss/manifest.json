@@ -1,0 +1,40 @@
+{
+  "id": "xp-svg-upload-stored-xss",
+  "version": "1.0.0",
+  "title": "GalleryUp — Vector Art Welcome",
+  "objective": "GalleryUp accepts SVG files as images. Upload one that runs script when an admin views the gallery.",
+  "family": "xml-parsers",
+  "subcategory": "parser-misconfiguration",
+  "difficulty": "medium",
+  "tags": [
+    "svg",
+    "stored-xss",
+    "file-upload",
+    "content-type",
+    "admin-bot"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/xml-parsers/xp-svg-upload-stored-xss/server.ts"
+  },
+  "verifier": {
+    "requiresBrowserBot": true,
+    "adminCookieName": "gu_admin",
+    "condition": "A gallery page embedding an uploaded SVG exfiltrates the admin-only token rendered on that page, proving script inside the SVG executed."
+  },
+  "weakness": "SVG is an XML document format that can carry a <script> element, and the gallery accepts and stores SVG uploads unmodified, then embeds them directly in a page using a tag that lets that script execute.",
+  "vulnerableEndpoint": "POST /gallery/upload then GET /gallery (each stored SVG's raw markup is inlined directly into the page's own HTML)",
+  "seededData": "An empty gallery to start. An admin-only token is rendered on the gallery page for admin sessions.",
+  "credentials": [],
+  "hints": [
+    "Upload a plain, harmless SVG first (a circle or a rectangle) and see how the gallery renders it.",
+    "SVG isn't really an image format the way PNG or JPEG are — it's a full XML document. XML documents can contain more than shapes.",
+    "Look at how the gallery actually embeds each uploaded file in the page — not every embedding tag treats its content the same way."
+  ],
+  "spoilers": [
+    "<script>",
+    "data-token"
+  ],
+  "burpNotes": "Use 'Simulate admin visit' on /gallery after uploading your SVG — the exploit needs to run in a browser context, not just an HTTP request."
+}

@@ -1,0 +1,36 @@
+{
+  "id": "sl-race-inventory-oversell",
+  "version": "1.0.0",
+  "title": "QuickCart — Last One in Stock",
+  "objective": "Only one unit of this limited item is in stock. Get more than one order to succeed for it.",
+  "family": "server-logic",
+  "subcategory": "race-condition",
+  "difficulty": "hard",
+  "tags": [
+    "race-condition",
+    "toctou",
+    "inventory",
+    "concurrency"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-race-inventory-oversell/server.ts"
+  },
+  "verifier": {
+    "condition": "More orders succeed for the limited item than units were in stock at the start."
+  },
+  "weakness": "The order handler checks that stock is available, then — after an awaited gap — decrements it, so concurrent orders can each see stock as available before either one's decrement has been applied.",
+  "vulnerableEndpoint": "POST /order (check-then-decrement, with an awaited gap between the two)",
+  "seededData": "One limited item with exactly 1 unit in stock. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Order the item once normally, then confirm a second, sequential order is correctly refused as out of stock.",
+    "A single request sees stock go from available to unavailable cleanly. The question is what two requests see if they arrive together.",
+    "Fire several order requests for the item at the same instant."
+  ],
+  "spoilers": [
+    "check-then-decrement"
+  ],
+  "burpNotes": "Send several order requests for the limited item in parallel, at the same instant, rather than sequentially."
+}

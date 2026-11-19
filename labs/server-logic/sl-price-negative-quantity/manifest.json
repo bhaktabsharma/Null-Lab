@@ -1,0 +1,35 @@
+{
+  "id": "sl-price-negative-quantity",
+  "version": "1.0.0",
+  "title": "QuickCart — Negative Quantities",
+  "objective": "A normal order costs what you'd expect. Find a quantity value that makes the total go the wrong way.",
+  "family": "server-logic",
+  "subcategory": "price-manipulation",
+  "difficulty": "easy",
+  "tags": [
+    "business-logic",
+    "price-manipulation",
+    "input-validation"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-price-negative-quantity/server.ts"
+  },
+  "verifier": {
+    "condition": "An order is placed whose computed total is less than or equal to zero."
+  },
+  "weakness": "The order total is computed as price times quantity with no check that quantity is a positive number, so a negative quantity produces a negative total.",
+  "vulnerableEndpoint": "POST /order (quantity field; total = price * quantity, unchecked)",
+  "seededData": "One product, a $45 desk lamp, in a fixed catalog. In-memory order log.",
+  "credentials": [],
+  "hints": [
+    "Place a normal order for a couple of lamps first and see what the total looks like.",
+    "The quantity field is just a number the form sends along. What happens with a number you wouldn't normally type into a quantity box?",
+    "Multiplying a price by a negative number doesn't just fail — it produces a very real, very wrong result."
+  ],
+  "spoilers": [
+    "negative quantity"
+  ],
+  "burpNotes": "Send the order request to Repeater and change quantity to a negative integer."
+}

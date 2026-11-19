@@ -1,0 +1,43 @@
+{
+  "id": "id-export-leaks-reset-tokens",
+  "version": "1.0.0",
+  "title": "Crewroster — Team Export",
+  "objective": "You manage a small team and can export the roster. Reset a teammate's password using something that export was never meant to reveal.",
+  "family": "information-disclosure",
+  "subcategory": "export-data-exposure",
+  "difficulty": "medium",
+  "tags": [
+    "exports",
+    "password-reset",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-export-leaks-reset-tokens/server.ts"
+  },
+  "verifier": {
+    "condition": "Another account's password is reset using a one-time token that was only ever obtainable from the manager's CSV export."
+  },
+  "weakness": "The team export selects every column on the user record for convenience, including a one-time password-reset token field that the UI never displays and that is meant to be delivered by email and used once.",
+  "vulnerableEndpoint": "GET /api/team/export then POST /api/password-reset",
+  "seededData": "A three-person roster; the manager already knows her own pending reset token (as if emailed to her), and one teammate has a separate pending reset token. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Manages the team and can export the roster as a manager."
+    }
+  ],
+  "hints": [
+    "Open the export and read every column, not just the ones shown on the team page.",
+    "A reset token is normally only known to the person it was emailed to. Where else might one be visible?",
+    "Use a token you found in the export to complete a password reset for the account it belongs to."
+  ],
+  "burpNotes": "Download the export with Burp running and look at the full response body.",
+  "spoilers": [
+    "resettoken",
+    "/api/password-reset"
+  ]
+}

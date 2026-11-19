@@ -1,0 +1,37 @@
+{
+  "id": "sl-race-coupon-reuse",
+  "version": "1.0.0",
+  "title": "QuickCart — One-Time Coupon",
+  "objective": "The WELCOME10 coupon is meant to apply once per account. Get it applied more than once.",
+  "family": "server-logic",
+  "subcategory": "race-condition",
+  "difficulty": "hard",
+  "tags": [
+    "race-condition",
+    "toctou",
+    "coupon-abuse",
+    "concurrency"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-race-coupon-reuse/server.ts"
+  },
+  "verifier": {
+    "condition": "The WELCOME10 coupon is successfully applied to the same account more than once."
+  },
+  "weakness": "The redeem handler checks whether the coupon has already been used, then — after an await that gives other requests a window to run — records that it has now been used, so two requests that both pass the check before either finishes can both redeem it.",
+  "vulnerableEndpoint": "POST /coupons/redeem (check-then-set, with an awaited gap between the two)",
+  "seededData": "One account, one single-use coupon WELCOME10 worth $10 off, starting unused. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Redeem the coupon once normally and confirm a second, SEQUENTIAL attempt is correctly refused.",
+    "Sequential requests see the correctly-updated state each time. What if two requests arrived at almost exactly the same moment instead?",
+    "Send a burst of redeem requests at the same time rather than one after another, and see whether more than one succeeds."
+  ],
+  "spoilers": [
+    "send in parallel",
+    "check-then-set"
+  ],
+  "burpNotes": "Use Burp's \"Send group in parallel\" (Repeater) or an equivalent tool to fire several redeem requests at the same instant, rather than one after another."
+}

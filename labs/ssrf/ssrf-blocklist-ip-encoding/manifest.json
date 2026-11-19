@@ -1,0 +1,37 @@
+{
+  "id": "ssrf-blocklist-ip-encoding",
+  "version": "1.0.0",
+  "title": "MetricsPing — Blocked, Technically",
+  "objective": "MetricsPing refuses to ping 'localhost' or '127.0.0.1' by name. Reach a simulated service listening on loopback anyway.",
+  "family": "ssrf",
+  "subcategory": "ssrf-host-validation-bypass",
+  "difficulty": "hard",
+  "tags": [
+    "ssrf",
+    "blocklist-bypass",
+    "ip-encoding",
+    "url-parsing"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-blocklist-ip-encoding/server.ts"
+  },
+  "verifier": {
+    "condition": "A request is sent to a loopback address although its ORIGINAL, unparsed host string was neither 'localhost' nor '127.0.0.1'."
+  },
+  "weakness": "The blocklist compares the raw, unparsed input string against a short list of known-bad spellings of loopback, but the underlying URL parser accepts several other numeric encodings of the exact same address that the blocklist never anticipated.",
+  "vulnerableEndpoint": "POST /ping (url field; the raw string is blocklist-checked, then parsed and fetched separately)",
+  "seededData": "A simulated service listening on 127.0.0.1:9100 representing an unauthenticated internal metrics endpoint.",
+  "credentials": [],
+  "hints": [
+    "Confirm the obvious spellings really are blocked first: try 'localhost' and '127.0.0.1' directly.",
+    "An IPv4 address is normally written as four decimal numbers, but that's just one way to write the same number. Computers don't care about the spelling.",
+    "Try an IPv4 address written as a single decimal number, or in hexadecimal, instead of the usual dotted form."
+  ],
+  "spoilers": [
+    "2130706433",
+    "0x7f000001"
+  ],
+  "burpNotes": "Send a request with the url parameter set to an alternate numeric encoding of 127.0.0.1 (decimal, hex, or octal) — none of these strings match the blocklist's exact comparisons."
+}

@@ -1,0 +1,38 @@
+{
+  "id": "sqli-order-by",
+  "version": "1.0.0",
+  "title": "ShelfSort — Sort Order Injection",
+  "objective": "The book list can be sorted by a column of your choice. A claim code is stored in a table the page never queries — recover it and claim it.",
+  "family": "injection",
+  "subcategory": "sqli-order-by",
+  "difficulty": "hard",
+  "tags": [
+    "sqli",
+    "order-by",
+    "blind",
+    "column-selection",
+    "sqlite"
+  ],
+  "estimatedMinutes": 40,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-order-by/server.ts"
+  },
+  "verifier": {
+    "condition": "The correct claim code — present only in a hidden table and different for every instance — is submitted to the claim form."
+  },
+  "weakness": "A user-chosen sort expression is concatenated into an ORDER BY clause, where UNION cannot be used, but a conditional sort key turns the order of the results into a yes/no channel.",
+  "vulnerableEndpoint": "GET /books?sort=",
+  "seededData": "SQLite: books table (5 rows, prices ordered differently from titles) and a hidden vault table with a per-instance 6-character claim code. Claim attempts are limited to 10 wrong guesses.",
+  "credentials": [],
+  "hints": [
+    "A UNION cannot follow an ORDER BY. What else can you put where a column name goes?",
+    "Look at what changes in the response when the database evaluates something different — even if the page never shows the data itself.",
+    "The first book in the list is enough to tell two sort orders apart."
+  ],
+  "spoilers": [
+    "ORDER BY (",
+    "CASE WHEN"
+  ],
+  "burpNotes": "Send a sort request to Repeater and watch which book comes first for different sort values. Errors are hidden, so a request that fails looks different from one that succeeds. Claim attempts are limited, so script the extraction rather than guessing."
+}

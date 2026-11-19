@@ -1,0 +1,44 @@
+{
+  "id": "sl-refund-ignores-discount",
+  "version": "1.0.0",
+  "title": "Cartly — Return an Item",
+  "objective": "Returns are meant to give you back what you paid. Get more back than you paid.",
+  "family": "server-logic",
+  "subcategory": "refund-amount-calculation",
+  "difficulty": "medium",
+  "tags": [
+    "refunds",
+    "discounts",
+    "calculation",
+    "business-logic"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-refund-ignores-discount/server.ts"
+  },
+  "verifier": {
+    "condition": "The total refunded on an order exceeds the amount the customer paid for it."
+  },
+  "weakness": "The return endpoint refunds list price multiplied by quantity and never applies the order-level discount that reduced the amount actually paid, so refunds on a discounted order exceed what was paid.",
+  "vulnerableEndpoint": "POST /api/orders/:id/returns",
+  "seededData": "Customer alice with order o-2001 (two items, paid after a coupon) and o-2002 (no coupon). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has one order paid with a coupon and one without."
+    }
+  ],
+  "hints": [
+    "Compare what an order says you paid with what its items are listed at.",
+    "Returns validate quantities carefully. Look instead at how the refund amount is worked out.",
+    "Return an item from the order that was paid with a coupon, and compare the refund to the amount paid."
+  ],
+  "burpNotes": "Capture a return and look at what comes back: the refund amount is in the response.",
+  "spoilers": [
+    "/returns",
+    "list price"
+  ]
+}

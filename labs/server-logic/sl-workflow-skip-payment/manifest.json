@@ -1,0 +1,36 @@
+{
+  "id": "sl-workflow-skip-payment",
+  "version": "1.0.0",
+  "title": "RideShare — Confirmed Without Paying",
+  "objective": "Book a ride through to completion, as the app intends. Then find a way to reach 'completed' for a second ride without ever paying for it.",
+  "family": "server-logic",
+  "subcategory": "workflow-step-skipping",
+  "difficulty": "medium",
+  "tags": [
+    "business-logic",
+    "workflow",
+    "state-machine"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-workflow-skip-payment/server.ts"
+  },
+  "verifier": {
+    "condition": "A ride reaches 'completed' status although its 'paid' step was never actually reached."
+  },
+  "weakness": "The final completion step checks only that a ride exists in SOME in-progress state, not that it specifically passed through the payment step, so a ride can be marked complete by calling the completion step directly.",
+  "vulnerableEndpoint": "POST /rides/:id/complete (checks status is not already terminal, not that payment happened)",
+  "seededData": "Rides move through requested -> accepted -> paid -> completed. A fresh ride is created per booking. In-memory.",
+  "credentials": [],
+  "hints": [
+    "Book one ride all the way through normally — request, accept, pay, complete — and note each endpoint it calls along the way.",
+    "Now book a second ride, but stop right before paying. What does the completion endpoint actually check before it lets you finish?",
+    "Calling a later step out of order isn't necessarily the same as being blocked by it."
+  ],
+  "spoilers": [
+    "skip /pay",
+    "status !== \"completed\""
+  ],
+  "burpNotes": "Walk the booking flow once normally to learn the endpoints, then on a fresh ride call /rides/:id/complete directly after /accept, skipping /pay entirely."
+}

@@ -1,0 +1,43 @@
+{
+  "id": "sl-currency-rounding-arbitrage",
+  "version": "1.0.0",
+  "title": "Fxwallet — Convert Currency",
+  "objective": "Convert between euros and dollars as often as you like. End up with more value than you started with, using nothing but conversions.",
+  "family": "server-logic",
+  "subcategory": "currency-rounding",
+  "difficulty": "medium",
+  "tags": [
+    "currency",
+    "rounding",
+    "arbitrage",
+    "business-logic"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-currency-rounding-arbitrage/server.ts"
+  },
+  "verifier": {
+    "condition": "The wallet's total value, counted in USD, has grown by at least $2.00 from conversions alone."
+  },
+  "weakness": "Conversions are rounded up to the next cent in both directions with no fee and a one-cent minimum, so repeatedly converting small amounts back and forth increases the wallet's total value.",
+  "vulnerableEndpoint": "POST /api/convert",
+  "seededData": "Account alice with a 100.00 EUR balance and no USD. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Holds euros only."
+    }
+  ],
+  "hints": [
+    "Convert a small amount and then convert the result back. Compare what you started with to what you ended with.",
+    "Look at how the results are rounded, and in whose favour, then think about the smallest amount you can convert.",
+    "Round-trip the smallest possible amount many times; script it, because each round trip only gains a little."
+  ],
+  "burpNotes": "Intruder or a small script is the right tool here: the gain per conversion is tiny.",
+  "spoilers": [
+    "/api/convert"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "id": "ssrf-logo-fetch",
+  "version": "1.0.0",
+  "title": "InvoiceHub — Fetch My Logo",
+  "objective": "InvoiceHub fetches and displays whatever image URL you give it for your company logo. Use that to read the contents of an internal admin page the application itself can reach, but you can't.",
+  "family": "ssrf",
+  "subcategory": "ssrf-basic",
+  "difficulty": "medium",
+  "tags": [
+    "ssrf",
+    "basic",
+    "information-disclosure",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-logo-fetch/server.ts"
+  },
+  "verifier": {
+    "condition": "The server's own response to the learner contains the body of a simulated internal-only service reached via the logo-fetch feature."
+  },
+  "weakness": "The server fetches whatever URL the user supplies with no restriction at all and reflects the response back, letting the user reach services the application can access but the user's own browser cannot.",
+  "vulnerableEndpoint": "POST /logo-preview (url field, fetched server-side with no validation)",
+  "seededData": "A simulated internal network (never real sockets/DNS — see lab-sdk's MockInternalNet) with one service at internal-finance.lab:80 returning a synthetic admin summary.",
+  "credentials": [],
+  "hints": [
+    "The logo preview clearly makes its OWN request to the URL you give it — the image appears without your browser ever loading it directly. What else could you point that request at?",
+    "This isn't about fetching an image at all. Try a URL that returns plain text or JSON instead and see what comes back.",
+    "Somewhere in this lab's description or hints is a hostname that sounds internal. Try it directly as the logo URL."
+  ],
+  "spoilers": [
+    "internal-finance.lab"
+  ],
+  "burpNotes": "Send the logo-preview request to Repeater and change the url parameter directly — no browser needed, since the fetch happens entirely server-side."
+}

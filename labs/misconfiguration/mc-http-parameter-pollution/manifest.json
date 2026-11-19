@@ -1,0 +1,43 @@
+{
+  "id": "mc-http-parameter-pollution",
+  "version": "1.0.0",
+  "title": "SearchAPI — Which One Wins?",
+  "objective": "A security check confirms the account you're asking about is your own. The actual lookup doesn't agree with it about which account that was.",
+  "family": "misconfiguration",
+  "subcategory": "http-parameter-pollution",
+  "difficulty": "hard",
+  "tags": [
+    "http-parameter-pollution",
+    "hpp",
+    "authorization-bypass",
+    "api"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/misconfiguration/mc-http-parameter-pollution/server.ts"
+  },
+  "verifier": {
+    "condition": "The account endpoint returns a record belonging to a user other than the caller, for a request whose ownership check passed."
+  },
+  "weakness": "A request with a repeated query parameter is parsed into an array, and two different parts of the handler disagree about which repeated value wins — the authorization check reads the first occurrence while the data lookup reads the last — so the two checks can be made to validate against different values entirely.",
+  "vulnerableEndpoint": "GET /api/account?userId=&userId= (ownership check uses the first value, the lookup uses the last)",
+  "seededData": "Users alice and bob, each with an account record. In-memory.",
+  "credentials": [
+    {
+      "label": "User account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Requesting your own account id normally works exactly as expected."
+    }
+  ],
+  "hints": [
+    "Request your own account normally, with a single userId value, and confirm it works as expected.",
+    "A query string parameter isn't limited to appearing once. What happens if you repeat it?",
+    "Two different pieces of code might not agree on which repeated value 'wins' — the one doing the authorization check and the one doing the actual lookup might each pick a different one."
+  ],
+  "spoilers": [
+    "last value"
+  ],
+  "burpNotes": "In Repeater, add the userId parameter twice with different values and see whether the response matches the value that passed the ownership check or a different one."
+}

@@ -1,0 +1,44 @@
+{
+  "id": "sl-coupon-stacking-slots",
+  "version": "1.0.0",
+  "title": "Bagelry — Promo Codes",
+  "objective": "The basket promises one discount per order and 30% off at most. Place an order that breaks that promise.",
+  "family": "server-logic",
+  "subcategory": "coupon-stacking",
+  "difficulty": "medium",
+  "tags": [
+    "coupons",
+    "discounts",
+    "policy",
+    "business-logic"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-coupon-stacking-slots/server.ts"
+  },
+  "verifier": {
+    "condition": "An order is placed with a combined discount above the 30% policy limit."
+  },
+  "weakness": "The promo and loyalty endpoints each enforce 'one code' only within their own slot and checkout adds the percentages without enforcing the 30% policy, so codes from both slots stack past the limit.",
+  "vulnerableEndpoint": "POST /api/cart/promo and POST /api/cart/loyalty, then POST /api/checkout",
+  "seededData": "One basket worth $100.00 and a few promo and loyalty codes (listed on the rewards page). In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has a rewards page with a loyalty code."
+    }
+  ],
+  "hints": [
+    "Read the rules the basket states, then look at how many different places a code can be entered.",
+    "Each place checks its own rule. Does anything compare them?",
+    "Apply a promo code and a loyalty reward code to the same basket, then check out."
+  ],
+  "burpNotes": "Capture both code-entry requests and the checkout; compare what each one validates.",
+  "spoilers": [
+    "/api/cart/loyalty",
+    "loyal20"
+  ]
+}

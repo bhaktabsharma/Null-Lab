@@ -1,0 +1,37 @@
+{
+  "id": "sqli-error-based",
+  "version": "1.0.0",
+  "title": "ParcelTrack — Verbose Errors",
+  "objective": "The tracking page never shows rows from anything but the parcels table — but it is very talkative when something goes wrong. Make the application itself tell you a staff member's API key.",
+  "family": "injection",
+  "subcategory": "sqli-error-based",
+  "difficulty": "medium",
+  "tags": [
+    "sqli",
+    "error-based",
+    "information-disclosure",
+    "sqlite"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/sqli-error-based/server.ts"
+  },
+  "verifier": {
+    "condition": "A database error message returned to the client contains the staff API key stored in the hidden staff table."
+  },
+  "weakness": "A string-concatenated query lets injected SQL evaluate a subquery inside a function whose error text echoes its argument, and the application returns raw database errors to the client.",
+  "vulnerableEndpoint": "GET /track?ref=",
+  "seededData": "SQLite: parcels table (3 rows) and a hidden staff table holding a per-instance API key. Per-instance file.",
+  "credentials": [],
+  "hints": [
+    "Try breaking the query on purpose and read what the page tells you. What does it reveal about the SQL that ran?",
+    "A UNION would not help here — the page only ever prints a fixed status label. Is there another way for data to leave the database?",
+    "Error messages often include the value that caused the error. What if the value that causes it is something you chose to look up?"
+  ],
+  "spoilers": [
+    "invalid input syntax",
+    "checked_int"
+  ],
+  "burpNotes": "Send the tracking request to Repeater and change the reference one character at a time, watching the status code and body. The database in this lab provides an integer-validation helper that rejects non-numeric input with a descriptive error, as some engines do on a failed cast."
+}

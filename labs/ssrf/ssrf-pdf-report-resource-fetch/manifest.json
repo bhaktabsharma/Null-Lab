@@ -1,0 +1,36 @@
+{
+  "id": "ssrf-pdf-report-resource-fetch",
+  "version": "1.0.0",
+  "title": "InvoicePrint — HTML to PDF",
+  "objective": "InvoicePrint turns your invoice HTML into a PDF, fetching any images it references to embed them. Get that resource-fetching step to read an internal-only service instead of an image.",
+  "family": "ssrf",
+  "subcategory": "ssrf-document-rendering",
+  "difficulty": "hard",
+  "tags": [
+    "ssrf",
+    "pdf-generation",
+    "second-order",
+    "simulated-network"
+  ],
+  "estimatedMinutes": 25,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/ssrf/ssrf-pdf-report-resource-fetch/server.ts"
+  },
+  "verifier": {
+    "condition": "The generated PDF's extracted text contains the body of a simulated internal-only service, fetched as an image resource referenced from the submitted HTML."
+  },
+  "weakness": "The PDF-rendering step fetches every image URL it finds in the submitted HTML to embed it, with no restriction on what those URLs may point to, so a request that looks like ordinary document formatting reaches whatever the rendering step itself can access.",
+  "vulnerableEndpoint": "POST /invoices/render-pdf (html field; every <img src> is fetched server-side during rendering)",
+  "seededData": "A simulated network with a normal external logo host and an internal-only service never meant to be reachable from outside.",
+  "credentials": [],
+  "hints": [
+    "Submit an invoice with a normal external logo image first, and look at what comes back.",
+    "The 'PDF' you get back is really just a simplified summary here — notice that it includes the fetched image's actual content, not just a reference to it.",
+    "Nothing restricts which URLs can appear in an <img> tag in the HTML you submit."
+  ],
+  "spoilers": [
+    "internal-billing.lab"
+  ],
+  "burpNotes": "Send the render request to Repeater with the HTML body containing an <img src=\"...\"> pointing at a candidate internal host, and read the simplified PDF text that comes back."
+}

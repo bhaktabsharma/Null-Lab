@@ -1,0 +1,37 @@
+{
+  "id": "cmdi-mock-diagnostics",
+  "version": "1.0.0",
+  "title": "NetOps Console — Ping Tool",
+  "objective": "The diagnostics page lets staff check that a host is reachable. A configuration file on the same machine holds an API token — read it through the tool.",
+  "family": "injection",
+  "subcategory": "os-command-injection",
+  "difficulty": "medium",
+  "tags": [
+    "command-injection",
+    "os-command",
+    "sandboxed-mock-shell"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/cmdi-mock-diagnostics/server.ts"
+  },
+  "verifier": {
+    "condition": "The tool's command output contains the API token from the configuration file, which the ping command can never print."
+  },
+  "weakness": "User input is concatenated into a command line that is handed to a shell interpreter, so shell metacharacters let the user run additional commands.",
+  "vulnerableEndpoint": "POST /diagnostics (host field)",
+  "seededData": "A SIMULATED shell over an in-memory virtual filesystem (config.ini with a per-instance token, README, motd). No real shell or host file is ever involved.",
+  "credentials": [],
+  "hints": [
+    "Think about what the application must do to turn your input into something that runs. How might it assemble the command?",
+    "A shell can run more than one command on a line. How do you tell it where one ends?",
+    "The interesting file lives near the tool's own directory."
+  ],
+  "spoilers": [
+    "; cat",
+    "&& cat",
+    "config.ini"
+  ],
+  "burpNotes": "This lab runs a simulated command interpreter over a virtual filesystem — it is safe by construction and never executes anything on the host. Normal input is a hostname; try varying it and read the output carefully."
+}

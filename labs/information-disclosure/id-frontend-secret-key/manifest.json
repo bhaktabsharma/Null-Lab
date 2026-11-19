@@ -1,0 +1,44 @@
+{
+  "id": "id-frontend-secret-key",
+  "version": "1.0.0",
+  "title": "Mapstead — Store Locator",
+  "objective": "Searches go through the app's own server. Call the upstream geocoding API directly, as if you were the app itself.",
+  "family": "information-disclosure",
+  "subcategory": "frontend-secret-exposure",
+  "difficulty": "easy",
+  "tags": [
+    "api-keys",
+    "frontend",
+    "static-assets",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 15,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-frontend-secret-key/server.ts"
+  },
+  "verifier": {
+    "condition": "The upstream geocoding endpoint is called directly using the API key found in a static asset."
+  },
+  "weakness": "A local-development configuration file containing the upstream API key was left in the production build and served as a public static asset, although the app's own search feature never needs the client to hold that key.",
+  "vulnerableEndpoint": "GET /api/geocode-upstream",
+  "seededData": "A store-locator page that loads two script files. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Can search for stores through the app normally."
+    }
+  ],
+  "hints": [
+    "The search box works by calling the app's own server. Look at everything else the page loads besides that call.",
+    "Not every script on a page is there to add behavior — some just hold values.",
+    "Find the upstream endpoint's own address and call it with the key straight from the config file."
+  ],
+  "burpNotes": "List every file the locator page requests and read each one, not just the one that handles clicks.",
+  "spoilers": [
+    "config.js",
+    "geocodeapikey"
+  ]
+}

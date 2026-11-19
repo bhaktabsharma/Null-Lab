@@ -1,0 +1,45 @@
+{
+  "id": "log-injection-crlf",
+  "version": "1.0.0",
+  "title": "SecureGate — Forged Entries",
+  "objective": "SecureGate shows recent security events on a public status page, including a count of administrator sign-ins. The administrator has not signed in — but nobody reading the log would know that if you made it say otherwise.",
+  "family": "injection",
+  "subcategory": "log-injection",
+  "difficulty": "medium",
+  "tags": [
+    "log-injection",
+    "crlf",
+    "log-forging",
+    "integrity"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/injection/log-injection-crlf/server.ts"
+  },
+  "verifier": {
+    "condition": "The security log contains a well-formed administrator sign-in entry although the administrator never actually signed in."
+  },
+  "weakness": "An attacker-controlled value is written into a line-oriented log without neutralising newlines, so extra lines — forged events — can be injected.",
+  "vulnerableEndpoint": "POST /login (username written to the log)",
+  "seededData": "An in-memory security log with a few seeded events and a login form; the admin password is random per instance, so a genuine admin sign-in is not possible.",
+  "credentials": [
+    {
+      "label": "Staff account",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Failed and successful sign-ins are both logged."
+    }
+  ],
+  "hints": [
+    "Sign in a few times — correctly and incorrectly — and read what the status page records. What format does it use?",
+    "The log is built from lines. Which parts of a line come from you?",
+    "A single request can put more than one line into the log."
+  ],
+  "spoilers": [
+    "%0a",
+    "\\n",
+    "login success for user"
+  ],
+  "burpNotes": "Compare the raw log format on the status page with what you submitted. Remember that form-encoded values are URL-decoded by the server before use."
+}

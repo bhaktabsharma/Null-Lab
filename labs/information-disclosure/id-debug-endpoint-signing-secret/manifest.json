@@ -1,0 +1,42 @@
+{
+  "id": "id-debug-endpoint-signing-secret",
+  "version": "1.0.0",
+  "title": "Notifyr — Push Notification Service",
+  "objective": "Sending a notification requires a request signed with this service's secret, which the console never shows you. Send one anyway.",
+  "family": "information-disclosure",
+  "subcategory": "debug-endpoint-exposure",
+  "difficulty": "medium",
+  "tags": [
+    "debug-endpoints",
+    "signatures",
+    "information-disclosure"
+  ],
+  "estimatedMinutes": 20,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/information-disclosure/id-debug-endpoint-signing-secret/server.ts"
+  },
+  "verifier": {
+    "condition": "A notification is sent with a signature computed using the secret read from a debug endpoint."
+  },
+  "weakness": "A `/debug/*` namespace added for local testing was never removed or gated by environment, and one of its endpoints echoes back the service's current HMAC signing secret.",
+  "vulnerableEndpoint": "POST /api/notifications/send",
+  "seededData": "An empty notification log. In memory; reset with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Can view the notification console."
+    }
+  ],
+  "hints": [
+    "Look for parts of the application that were never meant to be part of the product — not every route is linked from a page.",
+    "A service that signs its own requests has to keep that secret somewhere reachable by its own code. See whether anything exposes it.",
+    "Once you have the secret, compute an HMAC-SHA256 signature over the exact JSON body you want to send and attach it as the request asks."
+  ],
+  "burpNotes": "Try a handful of short, guessable paths under a common prefix — Burp's Intruder with a small wordlist is the right tool.",
+  "spoilers": [
+    "/debug/signing-secret"
+  ]
+}

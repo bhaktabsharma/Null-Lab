@@ -1,0 +1,45 @@
+{
+  "id": "sl-refund-idempotency-race",
+  "version": "1.0.0",
+  "title": "Brightcart — Order Refunds",
+  "objective": "Refunds can't exceed what you paid, and retried refunds are protected. Get an order refunded for more than you paid for it.",
+  "family": "server-logic",
+  "subcategory": "refund-idempotency",
+  "difficulty": "hard",
+  "tags": [
+    "refunds",
+    "race-condition",
+    "idempotency",
+    "business-logic"
+  ],
+  "estimatedMinutes": 30,
+  "entry": {
+    "runtime": "node",
+    "script": "labs/server-logic/sl-refund-idempotency-race/server.ts"
+  },
+  "verifier": {
+    "condition": "The refunded total of an order is greater than the amount the customer paid for it."
+  },
+  "weakness": "The refund endpoint checks the refundable amount and the idempotency key, then calls the card network, and only afterwards records the refunded total and the key, so overlapping requests all pass the same pre-network checks and the refunded total exceeds the amount paid.",
+  "vulnerableEndpoint": "POST /api/orders/:id/refund",
+  "seededData": "Customer alice with orders o-1001 ($80.00) and o-1002 ($45.00). Refund state lives in memory and resets with the instance.",
+  "credentials": [
+    {
+      "label": "Customer",
+      "username": "alice",
+      "password": "practice123",
+      "note": "Has two paid orders."
+    }
+  ],
+  "hints": [
+    "Issue a normal refund and read the request carefully, including its headers. Then try the obvious things: asking for too much, and asking twice.",
+    "Those sequential protections work. Think about what the server has recorded at each moment while a refund is still being processed — and how long processing takes.",
+    "Send several refund requests so that they are all in flight at the same time, each for a large part of the order total."
+  ],
+  "burpNotes": "Note how long the refund endpoint takes to answer and which headers the page adds to each refund request.",
+  "spoilers": [
+    "idempotency-key",
+    "at the same time",
+    "in parallel"
+  ]
+}
