@@ -1,0 +1,23 @@
+# EXPERIMENTAL — overlay that switches the control plane to the container-per-lab
+# runtime. Use together with the base file:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.docker-mode.yml \
+#       --profile docker-mode build
+#   docker compose -f docker-compose.yml -f docker-compose.docker-mode.yml up -d
+#
+# or let `npm run docker:selftest` do all of it and check the result.
+#
+# TRUST BOUNDARY: this mounts the host Docker socket into the CONTROL PLANE
+# container (never into lab containers). Anything that can talk to that
+# socket can control every container on the host, so only enable this on a
+# machine you are comfortable giving the NULLLAB control plane that power.
+services:
+  nulllab:
+    environment:
+      RUNTIME_MODE: docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    # The control plane runs as a non-root user; it needs the socket's group
+    # to use it. `npm run docker:selftest` sets DOCKER_GID automatically.
+    group_add:
+      - "${DOCKER_GID:-0}"

@@ -1,0 +1,55 @@
+services:
+  nulllab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nulllab:local
+    container_name: nulllab
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      API_HOST: 0.0.0.0
+      API_PORT: 4000
+      DATABASE_PATH: /repo/data/control.db
+      # RUNTIME_MODE=process (default) runs each lab target as an isolated
+      # child process inside this container — no Docker socket required.
+      # RUNTIME_MODE=docker is EXPERIMENTAL: see docs/docker-mode.md.
+      RUNTIME_MODE: ${RUNTIME_MODE:-process}
+      LAB_PORT_RANGE_START: 5100
+      LAB_PORT_RANGE_END: 5199
+      # A lab listening on the container's own loopback can never be reached
+      # through a published port, so inside the container labs bind 0.0.0.0.
+      # The exposure is limited by the `ports:` mapping below, which only
+      # publishes to the HOST's loopback.
+      LAB_BIND_HOST: 0.0.0.0
+      NULLLAB_SELF_CONTAINER: nulllab
+      # Chromium's own sandbox needs capabilities we'd rather not grant this
+      # container (e.g. SYS_ADMIN); running it with --no-sandbox instead
+      # keeps the container itself unprivileged. The browser only ever
+      # visits this container's own lab targets on 127.0.0.1.
+      NULLLAB_CHROMIUM_NO_SANDBOX: "true"
+    ports:
+      # Control plane + UI. Loopback only — see SECURITY.md before changing.
+      - "127.0.0.1:4000:4000"
+      # Lab targets. Each launched lab gets one port from this range; without
+      # this mapping the URL shown in the UI would not be reachable from your
+      # browser or Burp Suite. Loopback only: never 0.0.0.0.
+      - "127.0.0.1:5100-5199:5100-5199"
+    volumes:
+      - nulllab-data:/repo/data
+    shm_size: "512mb"
+
+  # EXPERIMENTAL docker runtime only. Builds the single shared lab image:
+  #   docker compose --profile docker-mode build lab-image
+  # It never runs as a service (profile-gated, and `true` exits at once).
+  lab-image:
+    profiles: ["docker-mode"]
+    build:
+      context: .
+      dockerfile: runtime/compose/lab.Dockerfile
+    image: nulllab-lab:local
+    entrypoint: ["true"]
+
+volumes:
+  nulllab-data:

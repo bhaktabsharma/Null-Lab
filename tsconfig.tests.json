@@ -1,0 +1,25 @@
+{
+  // Type-checks tests/ and scripts/ (run by `npm run typecheck`).
+  //
+  // Ratchet: every file under these folders is checked, so a NEW test or script
+  // cannot slip in unchecked. Files listed in "exclude" are older ones that
+  // already had type errors when this check was added; they were deliberately
+  // left unfixed. Do not add to this list — fix the new file instead
+  // (tests/unit/repo-scripts.test.ts fails if the list grows). Shrink it by fixing a file.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false,
+    "incremental": false,
+    "declaration": false,
+    "sourceMap": false,
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "include": ["tests/**/*.ts", "scripts/**/*.ts"],
+  "exclude": [
+    // Imports PortAllocator from runtime/orchestrator/src while the code under test expects the
+    // compiled @nulllab/orchestrator type: two nominally different classes (2 errors, no runtime effect).
+    "tests/unit/instance-manager.test.ts"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "nulllab",
+  "private": true,
+  "version": "0.1.0",
+  "description": "NULLLAB — practice over theory. Open-source, self-hosted web application security lab platform.",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "runtime/orchestrator",
+    "labs/*/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "npm run build:libs && concurrently -n API,WEB -c blue,magenta \"npm run dev -w apps/api\" \"npm run dev -w apps/web\"",
+    "build:libs": "npm run build -w packages/shared && npm run build -w packages/lab-sdk && npm run build -w @nulllab/orchestrator",
+    "build": "npm run build:libs && npm run build -w apps/api && npm run build -w apps/web",
+    "typecheck": "tsc -b --force && tsc -p labs --noEmit && tsc -p tsconfig.tests.json",
+    "lint": "eslint .",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "npm run build:libs && vitest run tests/unit",
+    "test:integration": "npm run build:libs && vitest run tests/integration",
+    "test:e2e": "npm run build:libs && playwright test",
+    "test:proxy": "npm run build:libs && node -e \"require('fs').rmSync('proxy-report',{recursive:true,force:true})\" && vitest run -c vitest.proxy.config.ts && tsx scripts/check-proxy-status.ts",
+    "proxy:status": "tsx scripts/check-proxy-status.ts",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "db:reset": "tsx scripts/db-reset.ts",
+    "coverage:matrix": "tsx scripts/print-coverage-matrix.ts",
+    "smoke": "bash scripts/smoke.sh",
+    "docker:selftest": "bash scripts/docker-selftest.sh",
+    "docs:labs": "tsx scripts/print-lab-catalogue.ts"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "22.15.0",
+    "@types/ws": "^8.18.2",
+    "concurrently": "10.0.6",
+    "eslint": "10.13.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.7",
+    "globals": "17.13.0",
+    "tsx": "4.23.15",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.0.5"
+  }
+}

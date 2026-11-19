@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/shared" },
+    { "path": "packages/lab-sdk" },
+    { "path": "apps/api" },
+    { "path": "runtime/orchestrator" }
+  ]
+}
